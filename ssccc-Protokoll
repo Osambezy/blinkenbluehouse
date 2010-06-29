@@ -1,0 +1,18 @@
+byte 0-1:
+  ASCII "VU"	VU-Meter
+  ASCII "IN"	Interactive mode
+  ASCII "OF"	OFF
+  ASCII	"ON"	ON
+
+byte 3-end:
+  data
+
+
+data:
+
+VU Packet:
+  0x00 - 0x06	volume
+  0xFF		end of stream
+
+
+IN Packet:

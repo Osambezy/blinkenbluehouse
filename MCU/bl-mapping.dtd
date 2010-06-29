@@ -1,0 +1,35 @@
+<!-- DTD für Andi's Blinkenlights-Software Lampen-Mapping-Format -->
+
+<!ELEMENT setup (comment?, buses, mapping)>
+<!ELEMENT comment (#PCDATA)>
+<!ELEMENT buses (bus)+>
+<!ELEMENT bus EMPTY>
+<!ATTLIST bus 
+   id		ID				#IMPLIED
+   type		(dummy|serial|udp2serial)	#REQUIRED
+   param1	CDATA				#IMPLIED
+   param2	CDATA				#IMPLIED
+>
+<!--
+serial bus:
+  param1: port
+  param2: baudrate
+udp2serial bus:
+  param1: ip address
+  param2: udp port
+-->
+<!ELEMENT mapping (row)+>
+<!ATTLIST mapping 
+   width	CDATA				#REQUIRED
+   height	CDATA				#REQUIRED
+>
+<!ELEMENT row (pixel)+>
+<!ELEMENT pixel EMPTY>
+<!ATTLIST pixel 
+   bus		CDATA				#REQUIRED
+   box		CDATA				#REQUIRED
+   port		CDATA				#REQUIRED
+   format	(bw|grey|rgb)			"bw"
+>
+<!-- braucht man im Fall eines RGB-Pixels nicht noch weitere Infos? -->
+

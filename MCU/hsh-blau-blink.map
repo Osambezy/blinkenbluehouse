@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE setup SYSTEM "bl-mapping.dtd">
+
+<setup>
+
+  <comment>Test-Blink zwischen Andi's und Maxi's Appartement</comment>
+
+  <buses>
+    <bus id="0" type="serial" param1="/dev/ttyS0" param2="38400" />
+    <bus id="1" type="udp2serial" param1="10.150.50.84" param2="42187" />
+  </buses>
+
+  <mapping width="3" height="2">
+    <row>
+      <pixel bus="1" box="6" port="0" />
+      <pixel bus="1" box="6" port="1" />
+      <pixel bus="1" box="6" port="2" />
+    </row>
+    <row>
+      <pixel bus="0" box="8" port="2" />
+      <pixel bus="0" box="8" port="1" />
+      <pixel bus="0" box="8" port="0" />
+    </row>
+  </mapping>
+
+</setup>
+

@@ -1,0 +1,45 @@
+Frame (10 bytes):
+
+byte0   byte1   byte2   byte3   byte4   byte5   byte6   byte7   byte8   checksum
+
+  ^
+  |
+  L     0x2A    start, single frame
+        0x2B    start, more frames follow (max. 10 frames total)
+        0xCC    continuation, no more frames
+        0xCD    continuation, more frames follow
+        other   accidentally detecteted frame or future feature, search for next valid frame
+
+
+byte0 start :
+
+byte1:  address, 0xff is broadcast
+byte2:  4 bit (hi): port number
+                0000    first port
+                0001    second port
+                0010    ...
+                1111    all ports
+        4 bit (lo): encoding
+                0000    bool:
+                                0x00    off
+                                0x01    on
+                                else    ignore
+                0001    brighness:
+                                0x00    off
+                                0xff    on
+                                other   grayscale
+                0010    color with brightness:
+                                byte1   brightness red
+                                byte2   brightness green
+                                byte3   brightness blue
+        0xFF reserved for end
+byte3 - byte8:
+        <data>
+        next port:      port/encoding (see byte3)
+        no more ports:  0xFF if space left in frame
+
+checksum:
+        byte0  xor  byte1  xor ... xor  byte8  xor  SALT
+        SALT: 0x55
+
+

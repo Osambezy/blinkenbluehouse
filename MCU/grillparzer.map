@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE setup SYSTEM "bl-mapping.dtd">
+
+<setup>
+
+  <comment>Grillparzerraum am Sommer-Hausfest 2009</comment>
+
+  <buses>
+    <bus id="0" type="serial" param1="/dev/ttyS0" param2="38400" />
+  </buses>
+
+  <mapping width="2" height="7">
+    <row>
+      <pixel bus="0" box="0" port="0" />
+      <pixel bus="0" box="0" port="1" />
+      <pixel bus="0" box="0" port="2" />
+      <pixel bus="0" box="5" port="1" />
+      <pixel bus="0" box="6" port="0" />
+      <pixel bus="0" box="8" port="0" />
+    </row>
+    <row>
+      <pixel bus="0" box="1" port="0" />
+      <pixel bus="0" box="1" port="1" />
+      <pixel bus="0" box="1" port="2" />
+      <pixel bus="0" box="5" port="0" />
+      <pixel bus="0" box="6" port="1" />
+      <pixel bus="0" box="6" port="2" />
+    </row>
+    <row>
+      <pixel bus="0" box="2" port="0" />
+      <pixel bus="0" box="2" port="1" />
+      <pixel bus="0" box="3" port="3" />
+      <pixel bus="0" box="4" port="3" />
+      <pixel bus="0" box="7" port="2" />
+      <pixel bus="0" box="8" port="1" />
+    </row>
+    <row>
+      <pixel bus="0" box="3" port="0" />
+      <pixel bus="0" box="2" port="2" />
+      <pixel bus="0" box="5" port="2" />
+      <pixel bus="0" box="4" port="2" />
+      <pixel bus="0" box="7" port="1" />
+      <pixel bus="0" box="8" port="2" />
+    </row>
+    <row>
+      <pixel bus="0" box="3" port="1" />
+      <pixel bus="0" box="3" port="2" />
+      <pixel bus="0" box="4" port="0" />
+      <pixel bus="0" box="4" port="1" />
+      <pixel bus="0" box="7" port="0" />
+      <pixel bus="0" box="8" port="3" />
+    </row>
+  </mapping>
+
+</setup>
+
