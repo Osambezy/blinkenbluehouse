@@ -1,0 +1,381 @@
+<?xml version="1.0" encoding="utf-8"?>
+<blm width="5" height="3" bits="1" channels="1">
+ <header>
+  <title>blinkenlights</title>
+  <description>Converted from old blinkenbluehouse animation format</description>
+  <creator>convert-to-bml.py</creator>
+ </header>
+
+ <frame duration="150">
+  <row>00000</row>
+  <row>00000</row>
+  <row>11111</row>
+ </frame>
+
+ <frame duration="150">
+  <row>00000</row>
+  <row>11111</row>
+  <row>00100</row>
+ </frame>
+
+ <frame duration="1000">
+  <row>11111</row>
+  <row>10101</row>
+  <row>11011</row>
+ </frame>
+
+ <frame duration="150">
+  <row>00100</row>
+  <row>11011</row>
+  <row>00000</row>
+ </frame>
+
+ <frame duration="150">
+  <row>11011</row>
+  <row>00000</row>
+  <row>00000</row>
+ </frame>
+
+ <frame duration="150">
+  <row>00000</row>
+  <row>00000</row>
+  <row>11111</row>
+ </frame>
+
+ <frame duration="150">
+  <row>00000</row>
+  <row>11111</row>
+  <row>10000</row>
+ </frame>
+
+ <frame duration="1000">
+  <row>11111</row>
+  <row>10000</row>
+  <row>10000</row>
+ </frame>
+
+ <frame duration="150">
+  <row>10000</row>
+  <row>10000</row>
+  <row>00000</row>
+ </frame>
+
+ <frame duration="150">
+  <row>10000</row>
+  <row>00000</row>
+  <row>00000</row>
+ </frame>
+
+ <frame duration="150">
+  <row>00000</row>
+  <row>00000</row>
+  <row>11111</row>
+ </frame>
+
+ <frame duration="1000">
+  <row>00000</row>
+  <row>11111</row>
+  <row>00000</row>
+ </frame>
+
+ <frame duration="150">
+  <row>11111</row>
+  <row>00000</row>
+  <row>00000</row>
+ </frame>
+
+ <frame duration="150">
+  <row>00000</row>
+  <row>00000</row>
+  <row>11110</row>
+ </frame>
+
+ <frame duration="150">
+  <row>00000</row>
+  <row>11110</row>
+  <row>00010</row>
+ </frame>
+
+ <frame duration="1000">
+  <row>11110</row>
+  <row>00010</row>
+  <row>11100</row>
+ </frame>
+
+ <frame duration="150">
+  <row>00010</row>
+  <row>11100</row>
+  <row>00000</row>
+ </frame>
+
+ <frame duration="150">
+  <row>11100</row>
+  <row>00000</row>
+  <row>00000</row>
+ </frame>
+
+ <frame duration="150">
+  <row>00000</row>
+  <row>00000</row>
+  <row>11111</row>
+ </frame>
+
+ <frame duration="150">
+  <row>00000</row>
+  <row>11111</row>
+  <row>00100</row>
+ </frame>
+
+ <frame duration="1000">
+  <row>11111</row>
+  <row>00100</row>
+  <row>11011</row>
+ </frame>
+
+ <frame duration="150">
+  <row>00100</row>
+  <row>11011</row>
+  <row>00000</row>
+ </frame>
+
+ <frame duration="150">
+  <row>11011</row>
+  <row>00000</row>
+  <row>00000</row>
+ </frame>
+
+ <frame duration="150">
+  <row>00000</row>
+  <row>00000</row>
+  <row>11111</row>
+ </frame>
+
+ <frame duration="150">
+  <row>00000</row>
+  <row>11111</row>
+  <row>10101</row>
+ </frame>
+
+ <frame duration="1000">
+  <row>11111</row>
+  <row>10101</row>
+  <row>10101</row>
+ </frame>
+
+ <frame duration="150">
+  <row>10101</row>
+  <row>10101</row>
+  <row>00000</row>
+ </frame>
+
+ <frame duration="150">
+  <row>10101</row>
+  <row>00000</row>
+  <row>00000</row>
+ </frame>
+
+ <frame duration="150">
+  <row>00000</row>
+  <row>00000</row>
+  <row>11110</row>
+ </frame>
+
+ <frame duration="150">
+  <row>00000</row>
+  <row>11110</row>
+  <row>00010</row>
+ </frame>
+
+ <frame duration="1000">
+  <row>11110</row>
+  <row>00010</row>
+  <row>11100</row>
+ </frame>
+
+ <frame duration="150">
+  <row>00010</row>
+  <row>11100</row>
+  <row>00000</row>
+ </frame>
+
+ <frame duration="150">
+  <row>11100</row>
+  <row>00000</row>
+  <row>00000</row>
+ </frame>
+
+ <frame duration="150">
+  <row>00000</row>
+  <row>00000</row>
+  <row>11111</row>
+ </frame>
+
+ <frame duration="150">
+  <row>00000</row>
+  <row>11111</row>
+  <row>10000</row>
+ </frame>
+
+ <frame duration="1000">
+  <row>11111</row>
+  <row>10000</row>
+  <row>10000</row>
+ </frame>
+
+ <frame duration="150">
+  <row>10000</row>
+  <row>10000</row>
+  <row>00000</row>
+ </frame>
+
+ <frame duration="150">
+  <row>10000</row>
+  <row>00000</row>
+  <row>00000</row>
+ </frame>
+
+ <frame duration="150">
+  <row>00000</row>
+  <row>00000</row>
+  <row>11111</row>
+ </frame>
+
+ <frame duration="1000">
+  <row>00000</row>
+  <row>11111</row>
+  <row>00000</row>
+ </frame>
+
+ <frame duration="150">
+  <row>11111</row>
+  <row>00000</row>
+  <row>00000</row>
+ </frame>
+
+ <frame duration="150">
+  <row>00000</row>
+  <row>00000</row>
+  <row>11111</row>
+ </frame>
+
+ <frame duration="150">
+  <row>00000</row>
+  <row>11111</row>
+  <row>10101</row>
+ </frame>
+
+ <frame duration="1000">
+  <row>11111</row>
+  <row>10101</row>
+  <row>11101</row>
+ </frame>
+
+ <frame duration="150">
+  <row>10101</row>
+  <row>11101</row>
+  <row>00000</row>
+ </frame>
+
+ <frame duration="150">
+  <row>11101</row>
+  <row>00000</row>
+  <row>00000</row>
+ </frame>
+
+ <frame duration="150">
+  <row>00000</row>
+  <row>00000</row>
+  <row>11111</row>
+ </frame>
+
+ <frame duration="150">
+  <row>00000</row>
+  <row>11111</row>
+  <row>00100</row>
+ </frame>
+
+ <frame duration="1000">
+  <row>11111</row>
+  <row>00100</row>
+  <row>11111</row>
+ </frame>
+
+ <frame duration="150">
+  <row>00100</row>
+  <row>11111</row>
+  <row>00000</row>
+ </frame>
+
+ <frame duration="150">
+  <row>11111</row>
+  <row>00000</row>
+  <row>00000</row>
+ </frame>
+
+ <frame duration="150">
+  <row>00000</row>
+  <row>00000</row>
+  <row>00001</row>
+ </frame>
+
+ <frame duration="150">
+  <row>00000</row>
+  <row>00001</row>
+  <row>11111</row>
+ </frame>
+
+ <frame duration="1000">
+  <row>00001</row>
+  <row>11111</row>
+  <row>00001</row>
+ </frame>
+
+ <frame duration="150">
+  <row>11111</row>
+  <row>00001</row>
+  <row>00000</row>
+ </frame>
+
+ <frame duration="150">
+  <row>00001</row>
+  <row>00000</row>
+  <row>00000</row>
+ </frame>
+
+ <frame duration="150">
+  <row>00000</row>
+  <row>00000</row>
+  <row>10110</row>
+ </frame>
+
+ <frame duration="150">
+  <row>00000</row>
+  <row>10110</row>
+  <row>10101</row>
+ </frame>
+
+ <frame duration="1000">
+  <row>10110</row>
+  <row>10101</row>
+  <row>01101</row>
+ </frame>
+
+ <frame duration="150">
+  <row>10101</row>
+  <row>01101</row>
+  <row>00000</row>
+ </frame>
+
+ <frame duration="150">
+  <row>01101</row>
+  <row>00000</row>
+  <row>00000</row>
+ </frame>
+
+ <frame duration="2000">
+  <row>00000</row>
+  <row>00000</row>
+  <row>00000</row>
+ </frame>
+
+</blm>

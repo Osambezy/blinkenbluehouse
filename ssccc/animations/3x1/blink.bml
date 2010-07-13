@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<blm width="3" height="1" bits="1" channels="1">
+ <header>
+  <title>blink</title>
+  <description>Converted from old blinkenbluehouse animation format</description>
+  <creator>convert-to-bml.py</creator>
+ </header>
+
+ <frame duration="400">
+  <row>000</row>
+ </frame>
+
+ <frame duration="400">
+  <row>100</row>
+ </frame>
+
+ <frame duration="400">
+  <row>110</row>
+ </frame>
+
+ <frame duration="400">
+  <row>111</row>
+ </frame>
+
+ <frame duration="400">
+  <row>011</row>
+ </frame>
+
+ <frame duration="400">
+  <row>001</row>
+ </frame>
+
+ <frame duration="400">
+  <row>000</row>
+ </frame>
+
+ <frame duration="400">
+  <row>111</row>
+ </frame>
+
+</blm>

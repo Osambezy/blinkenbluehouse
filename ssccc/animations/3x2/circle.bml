@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<blm width="3" height="2" bits="1" channels="1">
+ <header>
+  <title>circle</title>
+  <description>Converted from old blinkenbluehouse animation format</description>
+  <creator>convert-to-bml.py</creator>
+ </header>
+
+ <frame duration="200">
+  <row>100</row>
+  <row>000</row>
+ </frame>
+
+ <frame duration="200">
+  <row>010</row>
+  <row>000</row>
+ </frame>
+
+ <frame duration="200">
+  <row>001</row>
+  <row>000</row>
+ </frame>
+
+ <frame duration="200">
+  <row>000</row>
+  <row>001</row>
+ </frame>
+
+ <frame duration="200">
+  <row>000</row>
+  <row>010</row>
+ </frame>
+
+ <frame duration="200">
+  <row>000</row>
+  <row>100</row>
+ </frame>
+
+</blm>

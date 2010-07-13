@@ -1,0 +1,499 @@
+<?xml version="1.0" encoding="utf-8"?>
+<blm width="3" height="2" bits="1" channels="1">
+ <header>
+  <title>felix</title>
+  <description>Converted from old blinkenbluehouse animation format</description>
+  <creator>convert-to-bml.py</creator>
+ </header>
+
+ <frame duration="350">
+  <row>100</row>
+  <row>000</row>
+ </frame>
+
+ <frame duration="350">
+  <row>010</row>
+  <row>000</row>
+ </frame>
+
+ <frame duration="350">
+  <row>001</row>
+  <row>000</row>
+ </frame>
+
+ <frame duration="350">
+  <row>000</row>
+  <row>001</row>
+ </frame>
+
+ <frame duration="350">
+  <row>000</row>
+  <row>010</row>
+ </frame>
+
+ <frame duration="350">
+  <row>000</row>
+  <row>100</row>
+ </frame>
+
+ <frame duration="250">
+  <row>100</row>
+  <row>000</row>
+ </frame>
+
+ <frame duration="250">
+  <row>010</row>
+  <row>000</row>
+ </frame>
+
+ <frame duration="250">
+  <row>001</row>
+  <row>000</row>
+ </frame>
+
+ <frame duration="250">
+  <row>000</row>
+  <row>001</row>
+ </frame>
+
+ <frame duration="250">
+  <row>000</row>
+  <row>010</row>
+ </frame>
+
+ <frame duration="250">
+  <row>000</row>
+  <row>100</row>
+ </frame>
+
+ <frame duration="200">
+  <row>100</row>
+  <row>000</row>
+ </frame>
+
+ <frame duration="200">
+  <row>010</row>
+  <row>000</row>
+ </frame>
+
+ <frame duration="200">
+  <row>001</row>
+  <row>000</row>
+ </frame>
+
+ <frame duration="200">
+  <row>000</row>
+  <row>001</row>
+ </frame>
+
+ <frame duration="200">
+  <row>000</row>
+  <row>010</row>
+ </frame>
+
+ <frame duration="200">
+  <row>000</row>
+  <row>100</row>
+ </frame>
+
+ <frame duration="200">
+  <row>100</row>
+  <row>100</row>
+ </frame>
+
+ <frame duration="200">
+  <row>110</row>
+  <row>000</row>
+ </frame>
+
+ <frame duration="200">
+  <row>011</row>
+  <row>000</row>
+ </frame>
+
+ <frame duration="200">
+  <row>001</row>
+  <row>001</row>
+ </frame>
+
+ <frame duration="200">
+  <row>000</row>
+  <row>011</row>
+ </frame>
+
+ <frame duration="200">
+  <row>000</row>
+  <row>110</row>
+ </frame>
+
+ <frame duration="200">
+  <row>100</row>
+  <row>110</row>
+ </frame>
+
+ <frame duration="200">
+  <row>110</row>
+  <row>100</row>
+ </frame>
+
+ <frame duration="200">
+  <row>111</row>
+  <row>000</row>
+ </frame>
+
+ <frame duration="200">
+  <row>011</row>
+  <row>001</row>
+ </frame>
+
+ <frame duration="200">
+  <row>001</row>
+  <row>011</row>
+ </frame>
+
+ <frame duration="200">
+  <row>000</row>
+  <row>111</row>
+ </frame>
+
+ <frame duration="200">
+  <row>100</row>
+  <row>111</row>
+ </frame>
+
+ <frame duration="200">
+  <row>110</row>
+  <row>110</row>
+ </frame>
+
+ <frame duration="200">
+  <row>111</row>
+  <row>100</row>
+ </frame>
+
+ <frame duration="200">
+  <row>111</row>
+  <row>001</row>
+ </frame>
+
+ <frame duration="200">
+  <row>011</row>
+  <row>011</row>
+ </frame>
+
+ <frame duration="200">
+  <row>001</row>
+  <row>111</row>
+ </frame>
+
+ <frame duration="200">
+  <row>101</row>
+  <row>111</row>
+ </frame>
+
+ <frame duration="200">
+  <row>110</row>
+  <row>111</row>
+ </frame>
+
+ <frame duration="200">
+  <row>111</row>
+  <row>110</row>
+ </frame>
+
+ <frame duration="200">
+  <row>111</row>
+  <row>101</row>
+ </frame>
+
+ <frame duration="200">
+  <row>111</row>
+  <row>011</row>
+ </frame>
+
+ <frame duration="200">
+  <row>011</row>
+  <row>111</row>
+ </frame>
+
+ <frame duration="400">
+  <row>111</row>
+  <row>111</row>
+ </frame>
+
+ <frame duration="400">
+  <row>000</row>
+  <row>000</row>
+ </frame>
+
+ <frame duration="400">
+  <row>111</row>
+  <row>111</row>
+ </frame>
+
+ <frame duration="400">
+  <row>000</row>
+  <row>000</row>
+ </frame>
+
+ <frame duration="400">
+  <row>101</row>
+  <row>010</row>
+ </frame>
+
+ <frame duration="400">
+  <row>010</row>
+  <row>101</row>
+ </frame>
+
+ <frame duration="400">
+  <row>111</row>
+  <row>000</row>
+ </frame>
+
+ <frame duration="400">
+  <row>000</row>
+  <row>111</row>
+ </frame>
+
+ <frame duration="200">
+  <row>100</row>
+  <row>100</row>
+ </frame>
+
+ <frame duration="200">
+  <row>110</row>
+  <row>000</row>
+ </frame>
+
+ <frame duration="200">
+  <row>010</row>
+  <row>010</row>
+ </frame>
+
+ <frame duration="200">
+  <row>000</row>
+  <row>011</row>
+ </frame>
+
+ <frame duration="200">
+  <row>001</row>
+  <row>001</row>
+ </frame>
+
+ <frame duration="200">
+  <row>011</row>
+  <row>000</row>
+ </frame>
+
+ <frame duration="200">
+  <row>010</row>
+  <row>010</row>
+ </frame>
+
+ <frame duration="200">
+  <row>000</row>
+  <row>011</row>
+ </frame>
+
+ <frame duration="200">
+  <row>001</row>
+  <row>001</row>
+ </frame>
+
+ <frame duration="200">
+  <row>011</row>
+  <row>000</row>
+ </frame>
+
+ <frame duration="200">
+  <row>110</row>
+  <row>000</row>
+ </frame>
+
+ <frame duration="200">
+  <row>100</row>
+  <row>100</row>
+ </frame>
+
+ <frame duration="200">
+  <row>000</row>
+  <row>110</row>
+ </frame>
+
+ <frame duration="200">
+  <row>010</row>
+  <row>010</row>
+ </frame>
+
+ <frame duration="200">
+  <row>110</row>
+  <row>000</row>
+ </frame>
+
+ <frame duration="200">
+  <row>100</row>
+  <row>000</row>
+ </frame>
+
+ <frame duration="200">
+  <row>000</row>
+  <row>000</row>
+ </frame>
+
+ <frame duration="200">
+  <row>111</row>
+  <row>111</row>
+ </frame>
+
+ <frame duration="200">
+  <row>011</row>
+  <row>111</row>
+ </frame>
+
+ <frame duration="200">
+  <row>101</row>
+  <row>111</row>
+ </frame>
+
+ <frame duration="200">
+  <row>110</row>
+  <row>111</row>
+ </frame>
+
+ <frame duration="200">
+  <row>111</row>
+  <row>110</row>
+ </frame>
+
+ <frame duration="200">
+  <row>111</row>
+  <row>101</row>
+ </frame>
+
+ <frame duration="200">
+  <row>111</row>
+  <row>011</row>
+ </frame>
+
+ <frame duration="200">
+  <row>011</row>
+  <row>011</row>
+ </frame>
+
+ <frame duration="200">
+  <row>001</row>
+  <row>111</row>
+ </frame>
+
+ <frame duration="200">
+  <row>100</row>
+  <row>111</row>
+ </frame>
+
+ <frame duration="200">
+  <row>110</row>
+  <row>110</row>
+ </frame>
+
+ <frame duration="200">
+  <row>111</row>
+  <row>100</row>
+ </frame>
+
+ <frame duration="200">
+  <row>111</row>
+  <row>001</row>
+ </frame>
+
+ <frame duration="200">
+  <row>011</row>
+  <row>001</row>
+ </frame>
+
+ <frame duration="200">
+  <row>001</row>
+  <row>011</row>
+ </frame>
+
+ <frame duration="200">
+  <row>000</row>
+  <row>111</row>
+ </frame>
+
+ <frame duration="200">
+  <row>100</row>
+  <row>110</row>
+ </frame>
+
+ <frame duration="200">
+  <row>110</row>
+  <row>100</row>
+ </frame>
+
+ <frame duration="200">
+  <row>111</row>
+  <row>000</row>
+ </frame>
+
+ <frame duration="200">
+  <row>011</row>
+  <row>000</row>
+ </frame>
+
+ <frame duration="200">
+  <row>001</row>
+  <row>001</row>
+ </frame>
+
+ <frame duration="200">
+  <row>000</row>
+  <row>011</row>
+ </frame>
+
+ <frame duration="200">
+  <row>000</row>
+  <row>110</row>
+ </frame>
+
+ <frame duration="200">
+  <row>100</row>
+  <row>100</row>
+ </frame>
+
+ <frame duration="200">
+  <row>110</row>
+  <row>000</row>
+ </frame>
+
+ <frame duration="200">
+  <row>010</row>
+  <row>000</row>
+ </frame>
+
+ <frame duration="200">
+  <row>001</row>
+  <row>000</row>
+ </frame>
+
+ <frame duration="200">
+  <row>000</row>
+  <row>001</row>
+ </frame>
+
+ <frame duration="200">
+  <row>000</row>
+  <row>010</row>
+ </frame>
+
+ <frame duration="200">
+  <row>000</row>
+  <row>100</row>
+ </frame>
+
+ <frame duration="1000">
+  <row>000</row>
+  <row>000</row>
+ </frame>
+
+</blm>

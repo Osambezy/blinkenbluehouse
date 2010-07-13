@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<blm width="3" height="2" bits="1" channels="1">
+ <header>
+  <title>muhakler</title>
+  <description>Converted from old blinkenbluehouse animation format</description>
+  <creator>convert-to-bml.py</creator>
+ </header>
+
+ <frame duration="500">
+  <row>010</row>
+  <row>101</row>
+ </frame>
+
+ <frame duration="500">
+  <row>110</row>
+  <row>010</row>
+ </frame>
+
+ <frame duration="500">
+  <row>010</row>
+  <row>101</row>
+ </frame>
+
+ <frame duration="500">
+  <row>011</row>
+  <row>010</row>
+ </frame>
+
+</blm>

@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<blm width="2" height="7" bits="1" channels="1">
+ <header>
+  <title>mitte-raus</title>
+  <description>Converted from old blinkenbluehouse animation format</description>
+  <creator>convert-to-bml.py</creator>
+ </header>
+
+ <frame duration="400">
+  <row>00</row>
+  <row>00</row>
+  <row>00</row>
+  <row>00</row>
+  <row>00</row>
+  <row>00</row>
+  <row>00</row>
+ </frame>
+
+ <frame duration="400">
+  <row>00</row>
+  <row>00</row>
+  <row>00</row>
+  <row>11</row>
+  <row>00</row>
+  <row>00</row>
+  <row>00</row>
+ </frame>
+
+ <frame duration="400">
+  <row>00</row>
+  <row>00</row>
+  <row>11</row>
+  <row>11</row>
+  <row>11</row>
+  <row>00</row>
+  <row>00</row>
+ </frame>
+
+ <frame duration="400">
+  <row>00</row>
+  <row>11</row>
+  <row>11</row>
+  <row>11</row>
+  <row>11</row>
+  <row>11</row>
+  <row>00</row>
+ </frame>
+
+ <frame duration="400">
+  <row>11</row>
+  <row>11</row>
+  <row>11</row>
+  <row>11</row>
+  <row>11</row>
+  <row>11</row>
+  <row>11</row>
+ </frame>
+
+ <frame duration="400">
+  <row>00</row>
+  <row>11</row>
+  <row>11</row>
+  <row>11</row>
+  <row>11</row>
+  <row>11</row>
+  <row>00</row>
+ </frame>
+
+ <frame duration="400">
+  <row>00</row>
+  <row>00</row>
+  <row>11</row>
+  <row>11</row>
+  <row>11</row>
+  <row>00</row>
+  <row>00</row>
+ </frame>
+
+ <frame duration="400">
+  <row>00</row>
+  <row>00</row>
+  <row>00</row>
+  <row>11</row>
+  <row>00</row>
+  <row>00</row>
+  <row>00</row>
+ </frame>
+
+</blm>

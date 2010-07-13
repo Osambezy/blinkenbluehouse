@@ -1,5 +1,7 @@
-import threading, sys, os, time, socket
 import mcuf
+
+import threading, sys, os, time, socket
+import xml.dom.minidom
 
 class BlinkerThread(threading.Thread):
   def __init__(self, width, height, mcu_socket):
@@ -97,29 +99,28 @@ class Game(BlinkerThread):
 class Animation(BlinkerThread):
   def run(self):
     ANIMTIME = 30   # seconds per animation
-
-    scriptfile =  sys.argv[0]
-    scriptpath = scriptfile[0:scriptfile.rfind("/")]
-    animpath = scriptpath + "/animations/" + str(self.width) + "x" + str(self.height) + "/"
     while True:
-      try:
-        anims = os.listdir(animpath)
-      except OSError:
-        print "No animations available for " + str(self.width) + "x" + str(self.height)
-        sys.exit()
-      for anim in anims:
-        starttime = time.time()
-        f = open(animpath + anim, 'r')
-        while time.time() < starttime + ANIMTIME:
-          lightdata = f.readline()
-          while lightdata:
-            duration = float(f.readline())
-            data = [chr(int(light)) for light in lightdata.strip()]
-            self.send(data)
-            self.wait(duration / 1000)
-            lightdata = f.readline()
-          f.seek(0)
-        f.close()
+      if len(self.playlist)>0:
+        for anim in self.playlist:
+          #TODO: check playlist after every single animation
+          #TODO: get ANIMTIME (playing duration) or number of iterations from playlist
+          f = xml.dom.minidom.parse(anim)
+          awidth = int(f.getElementsByTagName("blm")[0].getAttribute("width"))
+          aheight = int(f.getElementsByTagName("blm")[0].getAttribute("height"))
+          chars = ((int(f.getElementsByTagName("blm")[0].getAttribute("bits"))+3)//4)*int(f.getElementsByTagName("blm")[0].getAttribute("channels"))
+          starttime = time.time()
+          while time.time() < starttime + ANIMTIME:
+            for frame in f.getElementsByTagName("frame"):
+              duration = int(frame.getAttribute("duration"))
+              lightdata = []
+              for row in frame.getElementsByTagName("row"): 
+                rowdata = row.firstChild.nodeValue
+                for i in range(awidth):
+                  lightdata.append(chr(int(rowdata[i*chars:(i+1)*chars], 16)))
+              self.send(lightdata)
+              self.wait(duration / 1000.0)
+      else:
+        self.wait(1)
 
 class Lauftext(BlinkerThread):
   def __init__(self, *args, **kwargs):

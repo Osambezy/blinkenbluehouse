@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<blm width="8" height="4" bits="1" channels="1">
+ <header>
+  <title>lauflicht</title>
+  <description>Converted from old blinkenbluehouse animation format</description>
+  <creator>convert-to-bml.py</creator>
+ </header>
+
+ <frame duration="500">
+  <row>00000000</row>
+  <row>00000000</row>
+  <row>00000000</row>
+  <row>00000100</row>
+ </frame>
+
+ <frame duration="500">
+  <row>00000000</row>
+  <row>00000000</row>
+  <row>00000000</row>
+  <row>01000000</row>
+ </frame>
+
+ <frame duration="500">
+  <row>00000000</row>
+  <row>00000000</row>
+  <row>00000000</row>
+  <row>00100000</row>
+ </frame>
+
+ <frame duration="500">
+  <row>00000000</row>
+  <row>00000000</row>
+  <row>00000000</row>
+  <row>00010000</row>
+ </frame>
+
+ <frame duration="500">
+  <row>00000000</row>
+  <row>00000000</row>
+  <row>00000000</row>
+  <row>00001000</row>
+ </frame>
+
+</blm>

@@ -2,21 +2,19 @@ import mcuf
 import blthreads
 import webinterface
 
-import time, socket
+import time, socket, os, sys
 import threading
 import Queue
 
-#MCU_HOST = '10.150.89.11'
-#MCU_HOST = '192.168.42.1'
-MCU_HOST = "localhost"
-MCU_PORT = 2323
-WIDTH = 20
-HEIGHT = 12
-
-LISTEN_PORT = 5000
-INTERACTIVE_TIMEOUT = 12
-HTTP_PORT = 5001
-HTTP_ENABLE = True
+import config
+MCU_HOST = config.MCU_HOST
+MCU_PORT = config.MCU_PORT
+WIDTH = config.WIDTH
+HEIGHT = config.HEIGHT
+LISTEN_PORT = config.LISTEN_PORT
+INTERACTIVE_TIMEOUT = config.INTERACTIVE_TIMEOUT
+HTTP_PORT = config.HTTP_PORT
+HTTP_ENABLE = config.HTTP_ENABLE
 
 mcu_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 mcu_socket.connect((MCU_HOST, MCU_PORT))
@@ -41,6 +39,16 @@ class UDPListener(threading.Thread):
     while True:
       packet = self.listen_socket.recv(1024)
       self.queue.put(packet)
+
+scriptpath = os.path.abspath(os.path.dirname(sys.argv[0]))
+animpath = scriptpath + "/animations/" + str(WIDTH) + "x" + str(HEIGHT) + "/"
+try:
+  anims = os.listdir(animpath)
+  playlist = [animpath+"/"+anim for anim in anims]
+except OSError:
+  print "No animations available for " + str(WIDTH) + "x" + str(HEIGHT)
+  playlist = []
+#TODO: save, load and modify playlist on-the-fly via webinterface, telnet, etc.
 
 packet_queue = Queue.Queue()
 listener = UDPListener(packet_queue, LISTEN_PORT)
@@ -69,6 +77,7 @@ def switchstatus(newstatus, param=""):
     blinker.stop()
     print "Animation mode"
     blinker = blthreads.Animation(WIDTH, HEIGHT, mcu_socket)
+    blinker.playlist = playlist
     blinker.start()
   elif newstatus == "vu":
     blinker.stop()

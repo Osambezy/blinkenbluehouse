@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<blm width="3" height="2" bits="1" channels="1">
+ <header>
+  <title>stroboskop</title>
+  <description>Converted from old blinkenbluehouse animation format</description>
+  <creator>convert-to-bml.py</creator>
+ </header>
+
+ <frame duration="200">
+  <row>111</row>
+  <row>111</row>
+ </frame>
+
+ <frame duration="200">
+  <row>000</row>
+  <row>000</row>
+ </frame>
+
+</blm>
