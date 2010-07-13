@@ -1,6 +1,6 @@
 import mcuf
 
-import threading, sys, os, time, socket
+import threading, sys, time, socket
 import xml.dom.minidom
 
 class BlinkerThread(threading.Thread):

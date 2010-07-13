@@ -9,7 +9,7 @@
     <bus id="0" type="serial" param1="/dev/ttyS0" param2="38400" />
   </buses>
 
-  <mapping width="2" height="7">
+  <mapping width="6" height="5">
     <row>
       <pixel bus="0" box="0" port="0" />
       <pixel bus="0" box="0" port="1" />

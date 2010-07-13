@@ -24,7 +24,7 @@ byte2:  4 bit (hi): port number
                                 0x00    off
                                 0x01    on
                                 else    ignore
-                0001    brighness:
+                0001    brightness:
                                 0x00    off
                                 0xff    on
                                 other   grayscale
@@ -35,7 +35,7 @@ byte2:  4 bit (hi): port number
         0xFF reserved for end
 byte3 - byte8:
         <data>
-        next port:      port/encoding (see byte3)
+        next port:      port/encoding (see byte2)
         no more ports:  0xFF if space left in frame
 
 checksum:
