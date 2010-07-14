@@ -7,7 +7,7 @@ class Bus():
       output += frame(payload(box_data[1]), box_data[0])
     self.send(output)
 
-# untere Ebene: Frames
+# lower layer: frames
 def frame(data, address):
   START_SINGLE = '\x2A'
   START_MORE = '\x2B'
@@ -37,23 +37,24 @@ def frame(data, address):
 
   return output
 
-# obere Ebene: Nutzdaten
+# upper layer: light data
 def payload(data_list):
   """
   :Parameters:
     data_list : list
-      format: [(port_num1, maxvalue1, value1), (port_num2, maxvalue2, value2), ...]
+      format: [(port_num1, channels1, maxvalue1, data1), (port_num2, channels2, maxvalue2, data2), ...]
   """
   output = ''
   for data in data_list:
-    if data[1] == 1:  # boolean
-      ENCODING = 0
-      if data[2] == 0: value = 0
-      else: value = 1
-    else:             # greyscale
-      ENCODING = 1
-      value = math.floor(255.0 * data[2] / data[1])
-    output += chr((data[0] << 4) | ENCODING) + chr(value)
+    if len(data[3]) != data[1]: raise ValueError, "wrong length of output data"
+    if data[1] == 1 and data[2] == 1:
+      ENCODING = 0      # boolean
+    elif data[1] == 1 and data[2] == 255:
+      ENCODING = 1      # greyscale
+    elif data[1] == 3 and data[2] == 255:
+      ENCODING = 2      # rgb
+    else: raise ValueError, "unsupported bus output parameters"
+    output += chr((data[0] << 4) | ENCODING) + data[3]
   return output
 
 

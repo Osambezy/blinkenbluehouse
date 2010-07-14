@@ -13,14 +13,12 @@ PORT = 2323
 FORMAT = "mcuf"  # supported: 'blp', 'mcuf'
 
 def init_mapping():
-  global TARGET_WIDTH, TARGET_HEIGHT, TARGET_MAXVAL, bus_controls, bus_mappings
+  global TARGET_WIDTH, TARGET_HEIGHT, bus_controls, bus_mappings
 
   TARGET_WIDTH = 15
   TARGET_HEIGHT = 15
   buses = (('dummy',),)
-  mapping = TARGET_WIDTH*TARGET_HEIGHT*((0,0,0),)
-
-  TARGET_MAXVAL = 1 # TODO: lamp specific
+  mapping = TARGET_WIDTH*TARGET_HEIGHT*((0,0,0,1,1),)
 
   try:
     filename = sys.argv[1]
@@ -30,7 +28,6 @@ def init_mapping():
   except IOError:
     print "Mapping file not found, using dummy output."
 
-  if TARGET_WIDTH<1 or TARGET_HEIGHT<1 or TARGET_MAXVAL<1: raise Exception, "Illegal values in mapping file"
   if len(mapping) != TARGET_WIDTH*TARGET_HEIGHT: raise Exception, "Error in mapping table"
   bus_controls = []
   for mybus in buses:
@@ -47,16 +44,24 @@ def init_mapping():
     if not buses[mapping[i][0]][0] == "dummy":
       if not mapping[i][1] in bus_mappings[mapping[i][0]].keys():
         bus_mappings[mapping[i][0]][mapping[i][1]] = []
-      bus_mappings[mapping[i][0]][mapping[i][1]] += [(mapping[i][2], i)]
+      bus_mappings[mapping[i][0]][mapping[i][1]] += [(i, mapping[i][2], mapping[i][3], mapping[i][4])]
 
 def read_mapping(filename):
   import xml.dom.minidom
   mapfile = xml.dom.minidom.parse(filename)
   buslist = [(bus.getAttribute("type"), bus.getAttribute("param1"), bus.getAttribute("param2")) for bus in mapfile.getElementsByTagName("bus")]
-  mapping = [(int(p.getAttribute("bus")), int(p.getAttribute("box")), int(p.getAttribute("port"))) for p in mapfile.getElementsByTagName("pixel")]
+  mapping = []
+  for p in mapfile.getElementsByTagName("pixel"):
+    if p.hasAttribute("format"):
+      format = p.getAttribute("format")
+    else:
+      format = "bw"
+    if format=="bw": channels,maxval = 1,1
+    elif format=="grey": channels,maxval = 1,255
+    elif format=="rgb": channels,maxval = 3,255
+    mapping.append((int(p.getAttribute("bus")), int(p.getAttribute("box")), int(p.getAttribute("port")), channels, maxval))
   w = int(mapfile.getElementsByTagName("mapping")[0].getAttribute("width"))
   h = int(mapfile.getElementsByTagName("mapping")[0].getAttribute("height"))
-  #TARGET_MAXVAL    lamp specific!
   return (buslist, mapping, w, h)
 
 def init_network():
@@ -101,20 +106,34 @@ def mainloop():
       else:
         print "invalid data received"
         continue
+
+      # sanity checks on received frame
       if len(pixel_data) != width*height*channels:
         print "Warning: wrong length of pixel data! Frame filled/cropped."
         pixel_data = (pixel_data + width*height*channels*"\x00")[0:width*height*channels]
+      for p in range(len(pixel_data)):
+        if ord(pixel_data[p]) > maxval:
+          print "Warning: brightness of pixel #"+p+" is greater than specified maximum value"
+          pixel_data = pixel_data[:p] + chr(maxval) + pixel_data[p+1:]
+      if channels != 1 and channels != 3:
+        print "Warning: unsupported number of channels: "+str(channels)+", using only first channel"
+        new_pixel_data = ""
+        for p in range(width*height): new_pixel_data += pixel_data[p*channels]
+        pixel_data = new_pixel_data
+        channels = 1
+
+      # display received frame on console
       display_frame = ""
-      for i in range(0,height):
+      for i in range(height): #TODO: mix down rgb
         display_frame += "  "
-        for j in range(0,width): display_frame += pixel_data[i*width+j].replace("\x00",".. ").replace("\x01","## ")
+        for j in range(width):
+          if ord(pixel_data[(i*width+j)*channels]) < maxval / 2.0: display_frame += ".. "
+          else: display_frame += "## "
         display_frame += "\x0A"
       print display_frame
+
       last_received = time.time()
-      if channels != 1:
-        print "Error: got "+str(channels)+" channels, but only 1 supported"
-      else:
-        output(pixel_data, width, height, maxval)
+      output(pixel_data, width, height, channels, maxval)
 
 def quit():
   print "Shutting down"
@@ -124,29 +143,31 @@ def quit():
     else: net.send('\xDE\xAD\xBE\xCDCLOSE')
   net.close()
 
-def output(data, width=0, height=0, maxval=0):
-  global TARGET_WIDTH, TARGET_HEIGHT, TARGET_MAXVAL
-  if width==0: width= TARGET_WIDTH
-  if height==0: width= TARGET_HEIGHT
-  if maxval==0: width= TARGET_MAXVAL
-  if len(data) != width * height: raise ValueError, "wrong dimensions"
-  if width != TARGET_WIDTH or height != TARGET_HEIGHT or maxval != TARGET_MAXVAL:
+def output(data, width, height, channels, maxval):
+  global TARGET_WIDTH, TARGET_HEIGHT
+  if len(data) != width * height * channels: raise ValueError, "wrong dimensions"
+  if width != TARGET_WIDTH or height != TARGET_HEIGHT:
     print "Resizing "+str(width)+"x"+str(height)+" to "+str(TARGET_WIDTH)+"x"+str(TARGET_HEIGHT)
-    data = resize_frame(data, width, height, maxval)
-
+    data = resize_frame(data, width, height, channels, maxval)
   for b in range(len(bus_controls)):
     box_data_list = []
     for box in bus_mappings[b].keys():
       lamps = []
       for lamp in bus_mappings[b][box]:
-        lamps += [(lamp[0], TARGET_MAXVAL, ord(data[lamp[1]]))]
+        lampdata = data[lamp[0]*channels:(lamp[0]+1)*channels]
+        if channels==1 and lamp[2]==3: lampdata = 3*lampdata
+        elif channels==3 and lamp[2]==1: lampdata = chr((ord(lampdata[0])+ord(lampdata[1])+ord(lampdata[2])) / 3)
+        if maxval != lamp[3]:
+          for c in range(len(lampdata)):
+            lampdata = lampdata[:c] + chr(int(float(ord(lampdata[c])) / maxval * lamp[3])) + lampdata[c+1:]
+        lamps += [(lamp[1], lamp[2], lamp[3], lampdata)]
       box_data_list += [(box, lamps)]
     if len(box_data_list) > 0:
       bus_controls[b].output(box_data_list)
 
-def resize_frame(data, width, height, maxval=255):
-  global TARGET_WIDTH, TARGET_HEIGHT, TARGET_MAXVAL
-  if len(data) != width * height: raise ValueError, "wrong dimensions"
+def resize_frame(data, width, height, channels, maxval): #TODO
+  global TARGET_WIDTH, TARGET_HEIGHT
+  if len(data) != width * height * channels: raise ValueError, "wrong dimensions"
   width = float(width)
   height = float(height)
   maxval = float(maxval)
@@ -164,7 +185,7 @@ def resize_frame(data, width, height, maxval=255):
           if x<x_ratio*new_x: weight *= x+1-(x_ratio*new_x)
           elif x>x_ratio*(new_x+1)-1: weight *= x_ratio*(new_x+1)-x
           value += ord(data[y*int(width)+x]) / maxval / y_ratio / x_ratio * weight
-      new_data += chr(int(math.floor(value*TARGET_MAXVAL+0.5)))
+      new_data += chr(int(math.floor(value*maxval+0.5)))
   return new_data
 
 
