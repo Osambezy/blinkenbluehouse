@@ -21,7 +21,7 @@ class MyHandler(BaseHTTPServer.BaseHTTPRequestHandler):
           self.end_headers()
           self.wfile.write("<html><head><title>BlinkenBlueHouse Webinterface</title></head>")
           self.wfile.write("<body>")
-          for command in [("&Ouml;FF", "OF"), ("&Ouml;N", "ON"), ("Animation", "AN"), ("VU-Meter", "VU")]:
+          for command in [("&Ouml;FF", "OF"), ("&Ouml;N", "ON"), ("Animation", "AN"), ("VU-Meter", "VU"), ("1", "TG%00"), ("2", "TG%01"), ("3", "TG%02")]:
             self.wfile.write("<a href=\"/?p=%s&amp;c=%s\" style=\"font-size:2.5em\">%s</a><br>" % (PASSWORD, command[1], command[0]))
           self.wfile.write("</body></html>")
         else:

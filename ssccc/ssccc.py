@@ -60,17 +60,20 @@ blinker = blthreads.BlinkerThread(WIDTH, HEIGHT, mcu_socket)
 blinker.start() # leerer Thread, macht vorerst gar nix
 
 status = ""
+toggled = WIDTH*HEIGHT*"\x00"
 
 def switchstatus(newstatus, param=""):
-  global status, mcu_socket, blinker
+  global status, toggled, mcu_socket, blinker
   if newstatus == "startup":
     print "SSCCC running"
   elif newstatus == "off":
     blinker.stop()
+    toggled = WIDTH*HEIGHT*"\x00"
     print "Switched off"
     send(mcuf.packet_alloff(WIDTH,HEIGHT))
   elif newstatus == "on":
     blinker.stop()
+    toggled = WIDTH*HEIGHT*"\x01"
     print "All on"
     send(mcuf.packet_allon(WIDTH,HEIGHT))
   elif newstatus == "anim":
@@ -112,6 +115,11 @@ while True:
       switchstatus("off")
     elif len(packet)>=2 and packet[0:2] == "ON":
       switchstatus("on")
+    elif len(packet)>=3 and packet[0:2] == "TG":
+      if status=="off" or status=="on":
+        if toggled[ord(packet[2])]=="\x00": toggled = toggled[:ord(packet[2])] + "\x01" + toggled[ord(packet[2])+1:]
+        else: toggled = toggled[:ord(packet[2])] + "\x00" + toggled[ord(packet[2])+1:]
+        send(mcuf.packet_bool(toggled,WIDTH,HEIGHT))
     elif len(packet)>=2 and packet[0:2] == "AN":
       switchstatus("anim")
     elif len(packet)>=2 and packet[0:2] == "VU":
