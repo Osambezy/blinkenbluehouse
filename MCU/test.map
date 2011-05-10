@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE setup SYSTEM "bl-mapping.dtd">
+
+<setup>
+
+  <comment>Test für verschiedene Output-Typen</comment>
+
+  <buses>
+    <bus id="0" type="udp2serial" param1="localhost" param2="42187" />
+  </buses>
+
+  <mapping width="3" height="2">
+    <row>
+      <pixel bus="0" box="0" port="0" format="bw"/>
+      <pixel bus="0" box="0" port="1" format="grey"/>
+      <pixel bus="0" box="0" port="2" format="rgb"/>
+    </row>
+    <row>
+      <pixel bus="0" box="1" port="0" format="bw"/>
+      <pixel bus="0" box="1" port="1" format="grey"/>
+      <pixel bus="0" box="1" port="2" format="rgb"/>
+    </row>
+  </mapping>
+
+</setup>
+

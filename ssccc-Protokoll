@@ -3,6 +3,7 @@ byte 0-1:
   ASCII "IN"	Interactive mode
   ASCII "OF"	OFF
   ASCII	"ON"	ON
+  ASCII "TG"	toggle
 
 byte 3-end:
   data
@@ -14,5 +15,7 @@ VU Packet:
   0x00 - 0x06	volume
   0xFF		end of stream
 
+TG Packet:
+  lamp id to toggle
 
 IN Packet:

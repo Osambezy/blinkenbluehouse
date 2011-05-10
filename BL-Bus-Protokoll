@@ -8,7 +8,7 @@ byte0   byte1   byte2   byte3   byte4   byte5   byte6   byte7   byte8   checksum
         0x2B    start, more frames follow (max. 10 frames total)
         0xCC    continuation, no more frames
         0xCD    continuation, more frames follow
-        other   accidentally detecteted frame or future feature, search for next valid frame
+        other   accidentally detected frame or future feature, search for next valid frame
 
 
 byte0 start :
@@ -23,7 +23,7 @@ byte2:  4 bit (hi): port number
                 0000    bool:
                                 0x00    off
                                 0x01    on
-                                else    ignore
+                                other   ignore
                 0001    brightness:
                                 0x00    off
                                 0xff    on
