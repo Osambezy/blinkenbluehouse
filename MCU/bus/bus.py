@@ -16,10 +16,9 @@ def frame(data, address):
   DATABYTES = 7
   PADDING = '\xFF'
   def CHECKSUM(from_what):
-    SALT = 85   # 01010101
-    sum = 0
-    for byte in from_what: sum = sum ^ ord(byte)
-    return chr(sum ^ SALT)
+    sum = 3
+    for byte in from_what: sum = (sum + ord(byte)) % 256
+    return chr(sum)
 
   data += (7 - (len(data) % DATABYTES)) * PADDING
   frames = len(data) / DATABYTES

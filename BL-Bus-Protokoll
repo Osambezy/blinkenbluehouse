@@ -39,7 +39,6 @@ byte3 - byte8:
         no more ports:  0xFF if space left in frame
 
 checksum:
-        byte0  xor  byte1  xor ... xor  byte8  xor  SALT
-        SALT: 0x55
+        ( byte0  +  byte1  + ... +  byte8  +  3 )  mod  256
 
 
