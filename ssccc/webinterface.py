@@ -37,15 +37,16 @@ class MyHandler(BaseHTTPServer.BaseHTTPRequestHandler):
         self.wfile.write("</form></body></html>")
 
 class MyHTTPServer(BaseHTTPServer.HTTPServer):
-  def __init__(self, queue, port):
+  def __init__(self, port, queue, playlist):
     BaseHTTPServer.HTTPServer.__init__(self, ('',port), MyHandler)
     self.queue = queue
+    self.playlist = playlist
 
 class Server(threading.Thread):
-  def __init__(self, queue, port):
+  def __init__(self, port, queue, playlist):
     threading.Thread.__init__(self)
     self.setDaemon(True)
-    self.server = MyHTTPServer(queue, port)
+    self.server = MyHTTPServer(port, queue, playlist)
     self.start()
 
   def run(self):

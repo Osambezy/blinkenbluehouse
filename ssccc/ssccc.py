@@ -1,5 +1,6 @@
 import mcuf
 import blthreads
+import playlist
 import webinterface
 
 import time, socket, os, sys
@@ -16,6 +17,8 @@ INTERACTIVE_TIMEOUT = config.INTERACTIVE_TIMEOUT
 HTTP_PORT = config.HTTP_PORT
 HTTP_ENABLE = config.HTTP_ENABLE
 
+scriptpath = os.path.abspath(os.path.dirname(sys.argv[0]))
+
 mcu_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 mcu_socket.connect((MCU_HOST, MCU_PORT))
 
@@ -26,7 +29,7 @@ def send(what):
     pass
 
 class UDPListener(threading.Thread):
-  def __init__(self, queue, port):
+  def __init__(self, port, queue):
     threading.Thread.__init__(self)
     self.setDaemon(True)
     self.queue = queue
@@ -40,21 +43,12 @@ class UDPListener(threading.Thread):
       packet = self.listen_socket.recv(1024)
       self.queue.put(packet)
 
-scriptpath = os.path.abspath(os.path.dirname(sys.argv[0]))
-animpath = scriptpath + "/animations/" + str(WIDTH) + "x" + str(HEIGHT) + "/"
-try:
-  anims = os.listdir(animpath)
-  playlist = [animpath+"/"+anim for anim in anims]
-except OSError:
-  print "No animations available for " + str(WIDTH) + "x" + str(HEIGHT)
-  playlist = []
-#TODO: save, load and modify playlist on-the-fly via webinterface, telnet, etc.
-
 packet_queue = Queue.Queue()
-listener = UDPListener(packet_queue, LISTEN_PORT)
+playlist = playlist.Playlist(scriptpath, WIDTH, HEIGHT)
+listener = UDPListener(LISTEN_PORT, packet_queue)
 
 if HTTP_ENABLE:
-  web = webinterface.Server(packet_queue, HTTP_PORT)
+  web = webinterface.Server(HTTP_PORT, packet_queue, playlist)
 
 blinker = blthreads.BlinkerThread(WIDTH, HEIGHT, mcu_socket)
 blinker.start() # leerer Thread, macht vorerst gar nix
@@ -79,7 +73,7 @@ def switchstatus(newstatus, param=""):
   elif newstatus == "anim":
     blinker.stop()
     print "Animation mode"
-    blinker = blthreads.Animation(WIDTH, HEIGHT, mcu_socket)
+    blinker = blthreads.Animation(WIDTH, HEIGHT, mcu_socket, pl=playlist)
     blinker.playlist = playlist
     blinker.start()
   elif newstatus == "vu":
@@ -138,7 +132,6 @@ while True:
         if len(packet)>3:
           vol2 = ord(packet[3])
           if vol2 > HEIGHT: vol2 = HEIGHT
-        #send(mcuf.packet_bool((WIDTH*HEIGHT-vol)*"\x00"+vol*"\x01",WIDTH,HEIGHT))
         data = WIDTH * HEIGHT * '\x00'
         for i in range(vol):
           data = data[:(HEIGHT-i)*WIDTH-2] + '\x01' + data[(HEIGHT-i)*WIDTH-1:]
