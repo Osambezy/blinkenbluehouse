@@ -29,14 +29,14 @@ def init_mapping():
     print "Mapping file not found, using dummy output."
 
   if len(mapping) != TARGET_WIDTH*TARGET_HEIGHT: raise Exception, "Error in mapping table"
-  bus_controls = []
-  for mybus in buses:
-    if mybus[0] == "serial":
-      bus_controls += [bus.RS485(mybus[1], int(mybus[2]))]
-    elif mybus[0] == "udp2serial":
-      bus_controls += [bus.UDP2RS485(mybus[1], int(mybus[2]))]
-    elif mybus[0] == "dummy":
-      bus_controls += [None]
+  bus_controls = dict()
+  for mybus in buses.items():
+    if mybus[1][0] == "serial":
+      bus_controls[mybus[0]] = bus.RS485(mybus[1][1], int(mybus[1][2]))
+    elif mybus[1][0] == "udp2serial":
+      bus_controls[mybus[0]] = bus.UDP2RS485(mybus[1][1], int(mybus[1][2]))
+    elif mybus[1][0] == "dummy":
+      bus_controls[mybus[0]] = None
     else:
       raise Exception, "Unknown bus type"
   bus_mappings = [dict() for i in range(len(buses))]
@@ -49,7 +49,9 @@ def init_mapping():
 def read_mapping(filename):
   import xml.dom.minidom
   mapfile = xml.dom.minidom.parse(filename)
-  buslist = [(bus.getAttribute("type"), bus.getAttribute("param1"), bus.getAttribute("param2")) for bus in mapfile.getElementsByTagName("bus")]
+  buslist = dict()
+  for bus in mapfile.getElementsByTagName("bus"):
+    buslist[int(bus.getAttribute("id"))] = (bus.getAttribute("type"), bus.getAttribute("param1"), bus.getAttribute("param2"))
   mapping = []
   for p in mapfile.getElementsByTagName("pixel"):
     if p.hasAttribute("format"):

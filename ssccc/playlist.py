@@ -54,7 +54,7 @@ class Playlist():
       self.next_repeat()
 
   def getNextFrame(self):
-    if len(self.list)==0: return (WIDTH*HEIGHT*'\x00', 1000)
+    if len(self.list)==0: return (self.WIDTH*self.HEIGHT*'\x00', 1000)
     self.next_frame()
     anim = self.list[self.pos_id][0][2]
     chars = ((int(anim.getElementsByTagName("blm")[0].getAttribute("bits"))+3)//4)*int(anim.getElementsByTagName("blm")[0].getAttribute("channels"))
