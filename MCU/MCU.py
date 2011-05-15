@@ -39,7 +39,7 @@ def init_mapping():
       bus_controls += [None]
     else:
       raise Exception, "Unknown bus type"
-  bus_mappings = len(buses) * [dict()]
+  bus_mappings = [dict() for i in range(len(buses))]
   for i in range(len(mapping)):
     if not buses[mapping[i][0]][0] == "dummy":
       if not mapping[i][1] in bus_mappings[mapping[i][0]].keys():
