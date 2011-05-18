@@ -5,6 +5,7 @@ import socket
 import time
 import struct
 import sys
+import threading
 
 #HOST = '10.150.86.34'
 #PORT = 4242
@@ -17,7 +18,7 @@ def init_mapping():
 
   TARGET_WIDTH = 15
   TARGET_HEIGHT = 15
-  buses = (('dummy',),)
+  buses = {0:('dummy',)}
   mapping = TARGET_WIDTH*TARGET_HEIGHT*((0,0,0,1,1),)
 
   try:
@@ -84,6 +85,7 @@ def mainloop():
   global net, MODE
   last_refresh = 0
   last_received = 0
+  s = Sender()
   while True:
     if (last_refresh<=time.time()-10 or (last_received<=time.time()-20 and last_refresh<=time.time()-1)) and MODE=="client":
       if FORMAT == "mcuf": net.send('\x42\x42\x42\x42\x00\x00\x00\x00\x00\x00\x00\x00')
@@ -135,7 +137,7 @@ def mainloop():
       print display_frame
 
       last_received = time.time()
-      output(pixel_data, width, height, channels, maxval)
+      s.output(pixel_data, width, height, channels, maxval)
 
 def quit():
   print "Shutting down"
@@ -145,27 +147,50 @@ def quit():
     else: net.send('\xDE\xAD\xBE\xCDCLOSE')
   net.close()
 
-def output(data, width, height, channels, maxval):
-  global TARGET_WIDTH, TARGET_HEIGHT
-  if len(data) != width * height * channels: raise ValueError, "wrong dimensions"
-  if width != TARGET_WIDTH or height != TARGET_HEIGHT:
-    print "Resizing "+str(width)+"x"+str(height)+" to "+str(TARGET_WIDTH)+"x"+str(TARGET_HEIGHT)
-    data = resize_frame(data, width, height, channels, maxval)
-  for b in range(len(bus_controls)):
-    box_data_list = []
-    for box in bus_mappings[b].keys():
-      lamps = []
-      for lamp in bus_mappings[b][box]:
-        lampdata = data[lamp[0]*channels:(lamp[0]+1)*channels]
-        if channels==1 and lamp[2]==3: lampdata = 3*lampdata
-        elif channels==3 and lamp[2]==1: lampdata = chr((ord(lampdata[0])+ord(lampdata[1])+ord(lampdata[2])) / 3)
-        if maxval != lamp[3]:
-          for c in range(len(lampdata)):
-            lampdata = lampdata[:c] + chr(int(float(ord(lampdata[c])) / maxval * lamp[3])) + lampdata[c+1:]
-        lamps += [(lamp[1], lamp[2], lamp[3], lampdata)]
-      box_data_list += [(box, lamps)]
-    if len(box_data_list) > 0:
-      bus_controls[b].output(box_data_list)
+class Sender(threading.Thread):
+  def __init__(self):
+    threading.Thread.__init__(self)
+    self.setDaemon(True)
+    self.lock = threading.Lock()
+    self.updated = False
+    self.data, self.channels, self.maxval = TARGET_WIDTH*TARGET_HEIGHT*"\x00", 1, 1
+    self.start()
+  def output(self, data, width, height, channels, maxval):
+    self.lock.acquire()
+    self.updated = True
+    #global TARGET_WIDTH, TARGET_HEIGHT
+    if len(data) != width * height * channels: raise ValueError, "wrong dimensions"
+    if width != TARGET_WIDTH or height != TARGET_HEIGHT:
+      print "Resizing "+str(width)+"x"+str(height)+" to "+str(TARGET_WIDTH)+"x"+str(TARGET_HEIGHT)
+      data = resize_frame(data, width, height, channels, maxval)
+    self.data, self.channels, self.maxval = data, channels, maxval
+    self.output_bus()
+    self.lock.release()
+  def run(self):
+    while True:
+      time.sleep(0.2)
+      self.lock.acquire()
+      if self.updated:
+        self.updated = False
+      else:
+        self.output_bus()
+      self.lock.release()
+  def output_bus(self):
+    for b in range(len(bus_controls)):
+      box_data_list = []
+      for box in bus_mappings[b].keys():
+        lamps = []
+        for lamp in bus_mappings[b][box]:
+          lampdata = self.data[lamp[0]*self.channels:(lamp[0]+1)*self.channels]
+          if self.channels==1 and lamp[2]==3: lampdata = 3*lampdata
+          elif self.channels==3 and lamp[2]==1: lampdata = chr((ord(lampdata[0])+ord(lampdata[1])+ord(lampdata[2])) / 3)
+          if self.maxval != lamp[3]:
+            for c in range(len(lampdata)):
+              lampdata = lampdata[:c] + chr(int(float(ord(lampdata[c])) / self.maxval * lamp[3])) + lampdata[c+1:]
+          lamps += [(lamp[1], lamp[2], lamp[3], lampdata)]
+        box_data_list += [(box, lamps)]
+      if len(box_data_list) > 0:
+        bus_controls[b].output(box_data_list)
 
 def resize_frame(data, width, height, channels, maxval): #TODO
   global TARGET_WIDTH, TARGET_HEIGHT
@@ -189,7 +214,6 @@ def resize_frame(data, width, height, channels, maxval): #TODO
           value += ord(data[y*int(width)+x]) / maxval / y_ratio / x_ratio * weight
       new_data += chr(int(math.floor(value*maxval+0.5)))
   return new_data
-
 
 init_mapping()
 init_network()
