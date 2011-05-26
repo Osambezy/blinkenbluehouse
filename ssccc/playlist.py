@@ -21,9 +21,9 @@ class Playlist():
     else:
       for anim in anims:
         f = xml.dom.minidom.parse(path+"/"+anim)
-        try: title = f.getElementsByTagName("header")[0].getElementsByTagName("title")[0].nodeValue
+        try: title = f.getElementsByTagName("header")[0].getElementsByTagName("title")[0].firstChild.data
         except IndexError, AttributeError: title = anim[:-4]
-        try: desc = f.getElementsByTagName("header")[0].getElementsByTagName("description")[0].nodeValue
+        try: desc = f.getElementsByTagName("header")[0].getElementsByTagName("description")[0].firstChild.data
         except IndexError, AttributeError: desc = ""
         if self.WIDTH != int(f.getElementsByTagName("blm")[0].getAttribute("width")) or self.HEIGHT != int(f.getElementsByTagName("blm")[0].getAttribute("height")):
           print "Warning: Animation dimensions don't match matrix size! Using anyway..."
@@ -62,7 +62,7 @@ class Playlist():
     duration = int(frame.getAttribute("duration"))
     lightdata = []
     for row in frame.getElementsByTagName("row"): 
-      rowdata = row.firstChild.nodeValue
+      rowdata = row.firstChild.data
       for i in range(len(rowdata)//chars):
         lightdata.append(chr(int(rowdata[i*chars:(i+1)*chars], 16)))
     return (lightdata, duration)
