@@ -8,7 +8,7 @@ class Bus():
     for box_data in box_data_list:
       output = frame(payload(box_data[1]), box_data[0])
       self.send(output)
-      time.sleep(0.001)
+      #time.sleep(0.001)
 
 # lower layer: frames
 def frame(data, address):
