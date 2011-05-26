@@ -16,6 +16,7 @@ LISTEN_PORT = config.LISTEN_PORT
 INTERACTIVE_TIMEOUT = config.INTERACTIVE_TIMEOUT
 HTTP_PORT = config.HTTP_PORT
 HTTP_ENABLE = config.HTTP_ENABLE
+LUKAS_COLUMN = config.LUKAS_COLUMN
 
 scriptpath = os.path.abspath(os.path.dirname(sys.argv[0]))
 
@@ -82,7 +83,7 @@ def switchstatus(newstatus, param=""):
   elif newstatus == "lukas":
     blinker.stop()
     print "Hau-den-Lukas mode"
-    blinker = blthreads.Lukas(WIDTH, HEIGHT, mcu_socket)
+    blinker = blthreads.Lukas(WIDTH, HEIGHT, mcu_socket, col=LUKAS_COLUMN)
     blinker.start()
   elif newstatus == "interactive":
     blinker.stop()
