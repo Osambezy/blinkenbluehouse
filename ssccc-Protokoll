@@ -16,6 +16,6 @@ VU Packet:
   0xFF		end of stream
 
 TG Packet:
-  lamp id to toggle
+  lamp id to toggle (two ascii characters)
 
 IN Packet:

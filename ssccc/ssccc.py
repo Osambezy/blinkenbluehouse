@@ -109,11 +109,15 @@ while True:
       switchstatus("off")
     elif len(packet)>=2 and packet[0:2] == "ON":
       switchstatus("on")
-    elif len(packet)>=3 and packet[0:2] == "TG":
+    elif len(packet)>=4 and packet[0:2] == "TG":
       if status=="off" or status=="on":
-        if toggled[ord(packet[2])]=="\x00": toggled = toggled[:ord(packet[2])] + "\x01" + toggled[ord(packet[2])+1:]
-        else: toggled = toggled[:ord(packet[2])] + "\x00" + toggled[ord(packet[2])+1:]
-        send(mcuf.packet_bool(toggled,WIDTH,HEIGHT))
+        try: n = int(packet[2:4])
+        except ValueError: pass
+        else:
+          if n>=0 and n<WIDTH*HEIGHT:
+            if toggled[n]=="\x00": toggled = toggled[:n] + "\x01" + toggled[n+1:]
+            else: toggled = toggled[:n] + "\x00" + toggled[n+1:]
+            send(mcuf.packet_bool(toggled,WIDTH,HEIGHT))
     elif len(packet)>=2 and packet[0:2] == "AN":
       switchstatus("anim")
     elif len(packet)>=2 and packet[0:2] == "VU":

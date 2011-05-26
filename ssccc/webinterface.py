@@ -19,10 +19,29 @@ class MyHandler(BaseHTTPServer.BaseHTTPRequestHandler):
           self.send_response(200)
           self.send_header("Content-type", "text/html")
           self.end_headers()
-          self.wfile.write("<html><head><title>BlinkenBlueHouse Webinterface</title></head>")
+          self.wfile.write("<html><head><title>BlinkenBlueHouse Webinterface</title>")
+          self.wfile.write("<style type=\"text/css\">body{background-color:#ccc;}a,a:hover,a:visited{font-size:2.5em;color:black;text-decoration:none;}table{border-spacing:0}td{border:1px solid black;padding:10px;}</style></head>")
           self.wfile.write("<body>")
-          for command in [("&Ouml;FF", "OF"), ("&Ouml;N", "ON"), ("Animation", "AN"), ("VU-Meter", "VU"), ("1", "TG%00"), ("2", "TG%01"), ("3", "TG%02")]:
-            self.wfile.write("<a href=\"/?p=%s&amp;c=%s\" style=\"font-size:2.5em\">%s</a><br>" % (PASSWORD, command[1], command[0]))
+          if "s" in params.keys():
+            if params["s"][0]=="t":
+              self.wfile.write("<table>")
+              for y in range(self.server.playlist.HEIGHT):
+                self.wfile.write("<tr>")
+                for x in range(self.server.playlist.WIDTH):
+                  self.wfile.write("<td><a href=\"?p=%s&amp;s=t&amp;c=TG%02d\">O</a></td>" % (PASSWORD, y*self.server.playlist.WIDTH+x))
+                self.wfile.write("</tr>")
+              self.wfile.write("</table>")
+            elif params["s"][0]=="a":
+              self.wfile.write("<table>")
+              for anim in self.server.playlist.list:
+                self.wfile.write("<tr><td>" + anim[0][0] + "</td><td>" + anim[0][1] + "</td></tr>")
+              self.wfile.write("</table>")
+            self.wfile.write("<a href=\"?p=%s\">&lt;- back</a><br>" % (PASSWORD,))
+          else:
+            for command in [("&Ouml;FF", "OF"), ("&Ouml;N", "ON"), ("Animation", "AN"), ("VU-Meter", "VU")]:
+              self.wfile.write("<a href=\"?p=%s&amp;c=%s\">%s</a><br>" % (PASSWORD, command[1], command[0]))
+            self.wfile.write("<a href=\"?p=%s&amp;s=t\">Toggle</a><br>" % (PASSWORD,))
+            self.wfile.write("<a href=\"?p=%s&amp;s=a\">Edit Playlist</a><br>" % (PASSWORD,))
           self.wfile.write("</body></html>")
         else:
           self.send_error(401)
@@ -31,8 +50,8 @@ class MyHandler(BaseHTTPServer.BaseHTTPRequestHandler):
         self.send_header("Content-type", "text/html")
         self.end_headers()
         self.wfile.write("<html><head><title>BlinkenBlueHouse Webinterface Login</title></head>")
-        self.wfile.write("<body><form method=\"GET\" action=\"/\">")
-        self.wfile.write("<input type=\"text\" name=\"p\">")
+        self.wfile.write("<body><form method=\"GET\" action=\"\">")
+        self.wfile.write("<input type=\"password\" name=\"p\">")
         self.wfile.write("<input type=\"submit\" value=\"Login\">")
         self.wfile.write("</form></body></html>")
 
