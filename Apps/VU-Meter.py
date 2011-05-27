@@ -1,16 +1,16 @@
 import socket, time, os, math, random, struct, threading, Queue
 try:
   import jack
-  import Numeric
   AUDIO_MODE = "jack"
 except ImportError:
   print "PyJack is not installed. Go to http://sourceforge.net/projects/py-jack/"
   print "(needs libjack-dev and python-dev to compile)"
   print "using ALSA instead..."
   AUDIO_MODE = "alsa"
+else:
+  import numpy
 
-CCC_HOST = '10.150.89.11'
-#CCC_HOST = '192.168.42.1'
+CCC_HOST = '10.150.89.194'
 #CCC_HOST = "localhost"
 CCC_PORT = 5000
 
@@ -68,8 +68,8 @@ class AudioGrabber(threading.Thread):
       jack.connect("system:capture_1", "VU-Meter:in_1")
       self.framesize = jack.get_buffer_size()
       self.rate = jack.get_sample_rate()
-      input_array = Numeric.zeros((1, self.framesize), 'f')
-      output_array = Numeric.zeros((1, self.framesize), 'f')
+      input_array = numpy.zeros((1, self.framesize), 'f')
+      output_array = numpy.zeros((1, self.framesize), 'f')
       time_sync = time.time()
       sync_interval = 1.0 / self.rate * self.framesize
       while True:
@@ -86,7 +86,7 @@ class AudioGrabber(threading.Thread):
           jack.process(output_array, input_array)
         except (jack.InputSyncError, jack.OutputSyncError):
           print "Jack out of sync"
-        rms = math.sqrt(Numeric.sum(Numeric.power(input_array[0],2))/self.framesize)
+        rms = math.sqrt(numpy.sum(numpy.power(input_array[0],2))/self.framesize)
         self.push(rms)
 
   def push(self, value):
