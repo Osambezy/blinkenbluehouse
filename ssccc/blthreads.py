@@ -119,6 +119,9 @@ class Lauftext(BlinkerThread):
       self.wait(DELAY)
 
 class Lukas(BlinkerThread):
+  def __init__(self, *args, **kwargs):
+    BlinkerThread.__init__(self, *args)
+    self.col = kwargs["col"]
   def run(self):
     lukasmeter = 0
     self.display(0)
@@ -140,7 +143,7 @@ class Lukas(BlinkerThread):
           self.wait(0.1)
 
   def display(self, pixels):
-    self.send((self.height-pixels)*"\x00\x00" + pixels*"\x00\x01")
+    self.send((self.height-pixels)*self.width*"\x00" + pixels*(self.col*"\x00"+"\x01"+(self.width-self.col-1)*"\x00"))
         
   def hau(self, value):
     self.control_value = value
