@@ -34,7 +34,7 @@ class RS485(bus.Bus):
     try:
       #self.myport.flushOutput()
       self.myport.write(data)
-    except (serial.SerialException, OSError, AttributeError):
+    except: # no exception name given, serial port errors come in many different unexpected flavors!
       print "Error: serial port not available, trying to reopen...  ",
       try: self.myport.close()
       except: pass
