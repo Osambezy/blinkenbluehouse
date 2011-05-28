@@ -1,15 +1,20 @@
 import os
 import xml.dom.minidom
+from threading import Lock
 
 class Playlist():
 
   def __init__(self, basepath, WIDTH, HEIGHT):
     self.basepath, self.WIDTH, self.HEIGHT = basepath, WIDTH, HEIGHT
-    self.updateAvailable()
-    self.list = [[a, 10] for a in self.available]
+    self.request_id = 0
     self.pos_id = 0
     self.pos_repeat = 0
     self.pos_frame = -1
+    self.lock = Lock()
+    self.updateAvailable()
+    self.list = []
+    for i in range(len(self.available)):
+      self.add(i)
 
   def updateAvailable(self):
     self.available = []
@@ -22,12 +27,14 @@ class Playlist():
       for anim in anims:
         f = xml.dom.minidom.parse(path+"/"+anim)
         try: title = f.getElementsByTagName("header")[0].getElementsByTagName("title")[0].firstChild.data
-        except IndexError, AttributeError: title = anim[:-4]
+        except (IndexError, AttributeError): title = anim[:-4]
         try: desc = f.getElementsByTagName("header")[0].getElementsByTagName("description")[0].firstChild.data
-        except IndexError, AttributeError: desc = ""
+        except (IndexError, AttributeError): desc = ""
         if self.WIDTH != int(f.getElementsByTagName("blm")[0].getAttribute("width")) or self.HEIGHT != int(f.getElementsByTagName("blm")[0].getAttribute("height")):
           print "Warning: Animation dimensions don't match matrix size! Using anyway..."
         self.available.append((title, desc, f))
+    self.available.sort()
+    self.request_id += 1
 
   def animStart(self):
     # nach Geschmack: Playlist von vorn beginnen etc.
@@ -48,7 +55,7 @@ class Playlist():
   def next_frame(self):
     self.pos_frame = self.pos_frame + 1
     try: frames = len(self.list[self.pos_id][0][2].getElementsByTagName("frame"))
-    except AttributeError, IndexError: frames = 0
+    except (AttributeError, IndexError): frames = 0
     if self.pos_frame >= frames:
       self.pos_frame = 0
       self.next_repeat()
@@ -67,4 +74,24 @@ class Playlist():
         lightdata.append(chr(int(rowdata[i*chars:(i+1)*chars], 16)))
     return (lightdata, duration)
 
-
+  def move_down(self, n):
+    if n>=0 and n<len(self.list)-1:
+      self.list[n], self.list[n+1] = self.list[n+1], self.list[n]
+      self.request_id += 1
+  def inc_repeats(self, n):
+    if n>=0 and n<len(self.list):
+      self.list[n][1] += 1
+      self.request_id += 1
+  def dec_repeats(self, n):
+    if n>=0 and n<len(self.list):
+      if self.list[n][1] > 1:
+        self.list[n][1] -= 1
+        self.request_id += 1
+  def remove(self, n):
+    if n>=0 and n<len(self.list):
+      del self.list[n]
+      self.request_id += 1
+  def add(self, avail_n):
+    if avail_n>=0 and avail_n<len(self.available):
+      self.list.append([self.available[avail_n], 10])
+      self.request_id += 1

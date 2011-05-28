@@ -20,8 +20,19 @@ class MyHandler(BaseHTTPServer.BaseHTTPRequestHandler):
           self.send_header("Content-type", "text/html")
           self.end_headers()
           self.wfile.write("<html><head><title>BlinkenBlueHouse Webinterface</title>")
-          self.wfile.write("<style type=\"text/css\">body{background-color:#ccc;}a,a:hover,a:visited{font-size:2.5em;color:black;text-decoration:none;}table{border-spacing:0}td{border:1px solid black;padding:10px;}</style></head>")
+          self.wfile.write("<style type=\"text/css\">body{background-color:#ccc;font-size:2.5em;}a,a:hover,a:visited{color:black;text-decoration:none;}table{border-spacing:0}td{border:1px solid black;padding:10px;}</style></head>")
           self.wfile.write("<body>")
+          if "a" in params.keys() and "rid" in params.keys():
+            self.server.playlist.lock.acquire()
+            if int(params["rid"][0])==self.server.playlist.request_id:
+              if params["a"][0][0]=="D": self.server.playlist.move_down(int(params["a"][0][1:]))
+              elif params["a"][0][0]=="P": self.server.playlist.inc_repeats(int(params["a"][0][1:]))
+              elif params["a"][0][0]=="M": self.server.playlist.dec_repeats(int(params["a"][0][1:]))
+              elif params["a"][0][0]=="X": self.server.playlist.remove(int(params["a"][0][1:]))
+              elif params["a"][0][0]=="A": self.server.playlist.add(int(params["a"][0][1:]))
+            else:
+              self.wfile.write("Error in playlist change: playlist was changed by another client.<br>")
+            self.server.playlist.lock.release()
           if "s" in params.keys():
             if params["s"][0]=="t":
               self.wfile.write("<table>")
@@ -32,11 +43,27 @@ class MyHandler(BaseHTTPServer.BaseHTTPRequestHandler):
                 self.wfile.write("</tr>")
               self.wfile.write("</table>")
             elif params["s"][0]=="a":
+              self.server.playlist.lock.acquire()
+              self.server.playlist.updateAvailable()
               self.wfile.write("<table>")
-              for anim in self.server.playlist.list:
-                self.wfile.write("<tr><td>" + anim[0][0] + "</td><td>" + anim[0][1] + "</td></tr>")
+              rid = self.server.playlist.request_id
+              for i in range(len(self.server.playlist.list)):
+                anim = self.server.playlist.list[i]
+                if anim[0][1] == "": comment = "&nbsp;"
+                else: comment = anim[0][1]
+                self.wfile.write("<tr><td>" + anim[0][0] + "</td><td>" + comment + "</td><td>" + str(anim[1]) + "</td>")
+                for act in (("D","&darr;"),("P","+"),("M","-"),("X","X")):
+                  self.wfile.write("<td><a href=\"?p=%s&amp;s=a&amp;a=%s%d&amp;rid=%d\">%s</a></td>" % (PASSWORD,act[0],i,rid,act[1]))
+                self.wfile.write("</tr>")
+              self.wfile.write("</table><p>Available animations:</p><table>")
+              for i in range(len(self.server.playlist.available)):
+                anim = self.server.playlist.available[i]
+                if anim[1] == "": comment = "&nbsp;"
+                else: comment = anim[1]
+                self.wfile.write("<tr><td>" + anim[0] + "</td><td>" + comment + "</td><td><a href=\"?p=%s&amp;s=a&amp;a=A%d&amp;rid=%d\">add</a></td></tr>" % (PASSWORD,i,rid))
               self.wfile.write("</table>")
-            self.wfile.write("<a href=\"?p=%s\">&lt;- back</a><br>" % (PASSWORD,))
+              self.server.playlist.lock.release()
+            self.wfile.write("<p><a href=\"?p=%s\">&lt;- back</a></p>" % (PASSWORD,))
           else:
             for command in [("&Ouml;FF", "OF"), ("&Ouml;N", "ON"), ("Animation", "AN"), ("VU-Meter", "VU")]:
               self.wfile.write("<a href=\"?p=%s&amp;c=%s\">%s</a><br>" % (PASSWORD, command[1], command[0]))
