@@ -2,8 +2,6 @@ import socket, time, threading
 from Tkinter import *
 
 CCC_HOST = '10.150.89.194'
-#CCC_HOST = '10.150.86.37'
-#CCC_HOST = '192.168.42.1'
 #CCC_HOST = "localhost"
 CCC_PORT = 5000
 
@@ -20,10 +18,9 @@ def sendkey(event):
     elif event.keysym == "F6": net.send("INtetris")
     elif event.keysym == "F7": net.send("INmaze")
     elif event.keysym == "F8": net.send("INpong")
-    elif event.keysym == "F10": net.send("V+")
-    elif event.keysym == "1": net.send("TG\x00")
-    elif event.keysym == "2": net.send("TG\x01")
-    elif event.keysym == "3": net.send("TG\x02")
+    elif event.keysym == "1": net.send("TG00")
+    elif event.keysym == "2": net.send("TG01")
+    elif event.keysym == "3": net.send("TG02")
     else:
       net.send("ID" + event.keysym)
     print 'Sent "'+event.keysym+'"'

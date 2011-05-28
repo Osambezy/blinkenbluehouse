@@ -56,6 +56,7 @@ blinker.start() # leerer Thread, macht vorerst gar nix
 
 status = ""
 toggled = WIDTH*HEIGHT*"\x00"
+vu_direction = True
 
 def switchstatus(newstatus, param=""):
   global status, toggled, mcu_socket, blinker
@@ -75,7 +76,6 @@ def switchstatus(newstatus, param=""):
     blinker.stop()
     print "Animation mode"
     blinker = blthreads.Animation(WIDTH, HEIGHT, mcu_socket, pl=playlist)
-    blinker.playlist = playlist
     blinker.start()
   elif newstatus == "vu":
     blinker.stop()
@@ -101,11 +101,10 @@ def switchstatus(newstatus, param=""):
 switchstatus("startup")
 
 to_time = time.time()
-heartbeat = False
 vol = 0
 while True:
   try:
-    packet = packet_queue.get(True, INTERACTIVE_TIMEOUT)
+    packet = packet_queue.get(True, 1.0)
     if len(packet)>=2 and packet[0:2] == "OF":
       switchstatus("off")
     elif len(packet)>=2 and packet[0:2] == "ON":
@@ -123,32 +122,32 @@ while True:
       switchstatus("anim")
     elif len(packet)>=2 and packet[0:2] == "VU":
       switchstatus("vu")
+      vu_direction = True
+    elif len(packet)>=2 and packet[0:2] == "UV":
+      switchstatus("vu")
+      vu_direction = False
     elif len(packet)>2 and packet[0:2] == "IN":
       switchstatus("interactive", param=packet[2:])
     elif len(packet)>2 and packet[0:2] == "TX":
       switchstatus("text", param=packet[2:])
     elif len(packet)>=2 and packet[0:2] == "HB":
-      heartbeat = True
+      to_time = time.time()
     elif len(packet)>=3 and packet[0:2] == "VD":
       if status=="startup": switchstatus("vu")
       if status=="vu":
+        data = WIDTH * HEIGHT * '\x00'
         vol = ord(packet[2])
         if vol > HEIGHT: vol = HEIGHT
+        for i in range(vol):
+          if vu_direction: data = data[:(HEIGHT-1-i)*WIDTH] + '\x01' + data[(HEIGHT-1-i)*WIDTH+1:]
+          else: data = data[:i*WIDTH] + '\x01' + data[i*WIDTH+1:]
         if len(packet)>3:
           vol2 = ord(packet[3])
           if vol2 > HEIGHT: vol2 = HEIGHT
-        data = WIDTH * HEIGHT * '\x00'
-        for i in range(vol):
-          data = data[:(HEIGHT-i)*WIDTH-2] + '\x01' + data[(HEIGHT-i)*WIDTH-1:]
-        for i in range(vol2):
-          data = data[:(HEIGHT-i)*WIDTH-1] + '\x01' + data[(HEIGHT-i)*WIDTH:]
+          for i in range(vol2):
+            if vu_direction: data = data[:(HEIGHT-1-i)*WIDTH+1] + '\x01' + data[(HEIGHT-1-i)*WIDTH+2:]
+            else: data = data[:i*WIDTH+1] + '\x01' + data[i*WIDTH+2:]
         send(mcuf.packet_bool(data,WIDTH,HEIGHT))
-    elif len(packet)>=2 and packet[0:2] == "V+":
-      if status=="vu":
-        try: vol = (vol + 1) % (WIDTH*HEIGHT)
-        except socket.error: pass
-        if vol > WIDTH * HEIGHT: vol = WIDTH * HEIGHT
-        send(mcuf.packet_bool((WIDTH*HEIGHT-vol-1)*"\x00"+"\x01"+(vol)*"\x00",WIDTH,HEIGHT))
     elif len(packet)>=3 and packet[0:2] == "ID":
       if status=="interactive": blinker.keypress(packet[2:])
     elif len(packet)>=3 and packet[0:2] == "LU":
@@ -158,14 +157,11 @@ while True:
         blinker.reset()
       else:
         blinker.hau(value)
-  except Queue.Empty:
-    if heartbeat: heartbeat = False
-    else:
-      if status == "interactive":
-        print "Timeout!"
-        switchstatus("anim")
-  except KeyboardInterrupt:
-    break
+  except Queue.Empty: pass
+  except KeyboardInterrupt: break
+  if status == "interactive" and time.time() > to_time + INTERACTIVE_TIMEOUT:
+    print "Interactive timeout! Switching to animation mode."
+    switchstatus("anim")
 
 mcu_socket.close()
 

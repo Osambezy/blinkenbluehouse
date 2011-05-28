@@ -65,7 +65,7 @@ class MyHandler(BaseHTTPServer.BaseHTTPRequestHandler):
               self.server.playlist.lock.release()
             self.wfile.write("<p><a href=\"?p=%s\">&lt;- back</a></p>" % (PASSWORD,))
           else:
-            for command in [("&Ouml;FF", "OF"), ("&Ouml;N", "ON"), ("Animation", "AN"), ("VU-Meter", "VU")]:
+            for command in [("&Ouml;FF", "OF"), ("&Ouml;N", "ON"), ("Animation", "AN"), ("VU-Meter", "VU"), ("UV-Meter", "UV")]:
               self.wfile.write("<a href=\"?p=%s&amp;c=%s\">%s</a><br>" % (PASSWORD, command[1], command[0]))
             self.wfile.write("<a href=\"?p=%s&amp;s=t\">Toggle</a><br>" % (PASSWORD,))
             self.wfile.write("<a href=\"?p=%s&amp;s=a\">Edit Playlist</a><br>" % (PASSWORD,))

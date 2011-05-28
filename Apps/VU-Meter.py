@@ -1,4 +1,4 @@
-import socket, time, os, math, random, struct, threading, Queue
+import socket, time, math, random
 try:
   import jack
   AUDIO_MODE = "jack"
@@ -7,6 +7,7 @@ except ImportError:
   print "(needs libjack-dev and python-dev to compile)"
   print "using ALSA instead..."
   AUDIO_MODE = "alsa"
+  import os, struct
 else:
   import numpy
 
