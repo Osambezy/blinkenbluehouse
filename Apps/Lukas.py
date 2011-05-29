@@ -22,13 +22,16 @@ min_t = 50.0
 A = (1.0-min_lukas) / ((1.0/min_t) - (1.0/255.0))
 B = (1.0-min_lukas) / (1.0 - (min_t/255.0)) - 1.0
 
+send("LU0")
+
 while True:
-  send("LU0")
-  print "reset"
   lukas_time = ord(myport.read())
-  print "Zeit: %d" % (lukas_time)
-  lukas =  A / lukas_time - B
-  send("LU" + str(lukas))
-  print str(int(lukas*100)) + "%"
-  time.sleep(2)
+  if lukas_time > 0:
+    print "Zeit: %d" % (lukas_time)
+    lukas =  A / lukas_time - B
+    send("LU" + str(lukas))
+    print str(int(lukas*100)) + "%"
+    time.sleep(2)
+    send("LU0")
+    print "reset"
 
