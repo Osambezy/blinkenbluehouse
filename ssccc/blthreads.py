@@ -50,6 +50,7 @@ class BlinkerThread(threading.Thread):
 class Game(BlinkerThread):
   def __init__(self, *args, **kwargs):
     BlinkerThread.__init__(self, *args)
+    self.col = kwargs["col"]
     import game_tetris, game_snake, game_pong, game_maze
     if kwargs["game"] == "pong":
       self.main = game_pong.main

@@ -5,7 +5,6 @@ import math
 import random
 
 def main(blthread):
-  print "PONG"
   if blthread.width<4 and blthread.height<4:
     print "matrix too small for pong"
     return
@@ -76,7 +75,7 @@ def show1D(blthread, data, horiz):
   for i in range (0, blthread.height):
     for j in range (0, blthread.width):
       if horiz and i==0: output += data[j]
-      elif (not horiz) and j==0: output += data[i]
+      elif (not horiz) and j==blthread.col: output += data[i]
       else: output += "\x00"
   blthread.send(output)
 

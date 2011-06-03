@@ -16,7 +16,9 @@ LISTEN_PORT = config.LISTEN_PORT
 INTERACTIVE_TIMEOUT = config.INTERACTIVE_TIMEOUT
 HTTP_PORT = config.HTTP_PORT
 HTTP_ENABLE = config.HTTP_ENABLE
-LUKAS_COLUMN = config.LUKAS_COLUMN
+GAME_COLUMN = config.GAME_COLUMN
+
+if GAME_COLUMN > WIDTH - 1: raise Exception, "Error in config: GAME_COLUMN value too big"
 
 scriptpath = os.path.abspath(os.path.dirname(sys.argv[0]))
 
@@ -83,12 +85,12 @@ def switchstatus(newstatus, param=""):
   elif newstatus == "lukas":
     blinker.stop()
     print "Hau-den-Lukas mode"
-    blinker = blthreads.Lukas(WIDTH, HEIGHT, mcu_socket, col=LUKAS_COLUMN)
+    blinker = blthreads.Lukas(WIDTH, HEIGHT, mcu_socket, col=GAME_COLUMN)
     blinker.start()
   elif newstatus == "interactive":
     blinker.stop()
     print "Interactive mode: " + param
-    blinker = blthreads.Game(WIDTH, HEIGHT, mcu_socket, game=param)
+    blinker = blthreads.Game(WIDTH, HEIGHT, mcu_socket, game=param, col=GAME_COLUMN)
     blinker.start()
   elif newstatus == "text":
     blinker.stop()
