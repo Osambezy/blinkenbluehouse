@@ -1,1 +1,46 @@
-2011-05-07.map
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE setup SYSTEM "bl-mapping.dtd">
+
+<setup>
+
+  <comment>StuStaCulum 2011, rotes und blaues Haus</comment>
+
+  <buses>
+    <bus id="0" type="serial" param1="/dev/ttyUSB0" param2="38400" />
+    <bus id="1" type="udp2serial" param1="10.150.117.174" param2="42187" />
+    <bus id="2" type="dummy" />
+  </buses>
+
+  <mapping width="2" height="7">
+    <row>
+      <pixel bus="1" box="5" port="1" />
+      <pixel bus="0" box="2" port="1" />
+    </row>
+    <row>
+      <pixel bus="1" box="5" port="0" />
+      <pixel bus="0" box="2" port="0" />
+    </row>
+    <row>
+      <pixel bus="1" box="5" port="2" />
+      <pixel bus="0" box="1" port="1" />
+    </row>
+    <row>
+      <pixel bus="1" box="4" port="3" />
+      <pixel bus="0" box="1" port="0" />
+    </row>
+    <row>
+      <pixel bus="1" box="4" port="2" />
+      <pixel bus="0" box="0" port="2" />
+    </row>
+    <row>
+      <pixel bus="1" box="4" port="0" />
+      <pixel bus="0" box="0" port="1" />
+    </row>
+    <row>
+      <pixel bus="1" box="4" port="1" />
+      <pixel bus="0" box="0" port="0" />
+    </row>
+  </mapping>
+
+</setup>
+
