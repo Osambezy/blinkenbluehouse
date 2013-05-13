@@ -112,6 +112,7 @@ while True:
     elif len(packet)>=2 and packet[0:2] == "ON":
       switchstatus("on")
     elif len(packet)>=4 and packet[0:2] == "TG":
+      if status=="startup": status = "off"
       if status=="off" or status=="on":
         try: n = int(packet[2:4])
         except ValueError: pass
