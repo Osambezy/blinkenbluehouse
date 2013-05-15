@@ -1,86 +1,114 @@
 import BaseHTTPServer
-import cgi
+import urlparse
 import threading
 
-PASSWORD = "analdenscheiss"
+import config
 
 class MyHandler(BaseHTTPServer.BaseHTTPRequestHandler):
   def do_GET(self):
-    if self.path=="/robots.txt" or self.path=="/favicon.ico":
+    if self.path=='/robots.txt' or self.path=='/favicon.ico':
       self.send_error(404)
-    else:
-      params = dict()
-      if self.path.find("?") != -1:
-        params = cgi.parse_qs(self.path[self.path.find("?")+1:])
-      if "p" in params.keys():
-        if params["p"][0]==PASSWORD:
-          if "c" in params.keys():
-            self.server.queue.put(params["c"][0])
-          self.send_response(200)
-          self.send_header("Content-type", "text/html")
-          self.end_headers()
-          self.wfile.write("<html><head><title>BlinkenBlueHouse Webinterface</title>")
-          self.wfile.write("<style type=\"text/css\">body{background-color:#ccc;font-size:2.5em;}a,a:hover,a:visited{color:black;text-decoration:none;}table{border-spacing:0}td{border:1px solid black;padding:10px;}</style></head>")
-          self.wfile.write("<body>")
-          if "a" in params.keys() and "rid" in params.keys():
-            self.server.playlist.lock.acquire()
-            if int(params["rid"][0])==self.server.playlist.request_id:
-              if params["a"][0][0]=="D": self.server.playlist.move_down(int(params["a"][0][1:]))
-              elif params["a"][0][0]=="P": self.server.playlist.inc_repeats(int(params["a"][0][1:]))
-              elif params["a"][0][0]=="M": self.server.playlist.dec_repeats(int(params["a"][0][1:]))
-              elif params["a"][0][0]=="X": self.server.playlist.remove(int(params["a"][0][1:]))
-              elif params["a"][0][0]=="A": self.server.playlist.add(int(params["a"][0][1:]))
-            else:
-              self.wfile.write("Error in playlist change: playlist was changed by another client.<br>")
-            self.server.playlist.lock.release()
-          if "s" in params.keys():
-            if params["s"][0]=="t":
-              self.wfile.write("<table>")
-              for y in range(self.server.playlist.HEIGHT):
-                self.wfile.write("<tr>")
-                for x in range(self.server.playlist.WIDTH):
-                  self.wfile.write("<td><a href=\"?p=%s&amp;s=t&amp;c=TG%02d\">O</a></td>" % (PASSWORD, y*self.server.playlist.WIDTH+x))
-                self.wfile.write("</tr>")
-              self.wfile.write("</table>")
-            elif params["s"][0]=="a":
-              self.server.playlist.lock.acquire()
-              self.server.playlist.updateAvailable()
-              self.wfile.write("<table>")
-              rid = self.server.playlist.request_id
-              for i in range(len(self.server.playlist.list)):
-                anim = self.server.playlist.list[i]
-                if anim[0][1] == "": comment = "&nbsp;"
-                else: comment = anim[0][1]
-                self.wfile.write("<tr><td>" + anim[0][0] + "</td><td>" + comment + "</td><td>" + str(anim[1]) + "</td>")
-                for act in (("D","&darr;"),("P","+"),("M","-"),("X","X")):
-                  self.wfile.write("<td><a href=\"?p=%s&amp;s=a&amp;a=%s%d&amp;rid=%d\">%s</a></td>" % (PASSWORD,act[0],i,rid,act[1]))
-                self.wfile.write("</tr>")
-              self.wfile.write("</table><p>Available animations:</p><table>")
-              for i in range(len(self.server.playlist.available)):
-                anim = self.server.playlist.available[i]
-                if anim[1] == "": comment = "&nbsp;"
-                else: comment = anim[1]
-                self.wfile.write("<tr><td>" + anim[0] + "</td><td>" + comment + "</td><td><a href=\"?p=%s&amp;s=a&amp;a=A%d&amp;rid=%d\">add</a></td></tr>" % (PASSWORD,i,rid))
-              self.wfile.write("</table>")
-              self.server.playlist.lock.release()
-            self.wfile.write("<p><a href=\"?p=%s\">&lt;- back</a></p>" % (PASSWORD,))
-          else:
-            for command in [("&Ouml;FF", "OF"), ("&Ouml;N", "ON"), ("Animation", "AN"), ("VU-Meter", "VU"), ("UV-Meter", "UV")]:
-              self.wfile.write("<a href=\"?p=%s&amp;c=%s\">%s</a><br>" % (PASSWORD, command[1], command[0]))
-            self.wfile.write("<a href=\"?p=%s&amp;s=t\">Toggle</a><br>" % (PASSWORD,))
-            self.wfile.write("<a href=\"?p=%s&amp;s=a\">Edit Playlist</a><br>" % (PASSWORD,))
-          self.wfile.write("</body></html>")
-        else:
-          self.send_error(401)
+      return
+    self.send_response(200)
+    self.send_header('Content-type', 'text/html')
+    self.end_headers()
+    self.wfile.write(
+'''<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+   "http://www.w3.org/TR/html4/loose.dtd">
+<html><head><title>BlinkenBlueHouse Webinterface Login</title></head>
+<body><form action="" method="POST">
+  <input type="password" name="p">
+  <input type="submit" value="Login">
+</form></body></html>
+''')
+
+  def do_POST(self):
+    query_string = self.rfile.read(int(self.headers['Content-Length']))
+    params = urlparse.parse_qs(query_string)
+    if 'p' not in params.keys() or params['p'][0] != config.HTTP_PASSWORD:
+      self.send_error(401)
+      return
+    if 'c' in params.keys():
+      self.server.queue.put(params['c'][0])
+    self.send_response(200)
+    self.send_header('Content-type', 'text/html')
+    self.end_headers()
+    output = ''
+    output += \
+'''<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+   "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head><title>BlinkenBlueHouse Webinterface</title>
+<style type="text/css">body{background-color:#ccc;font-size:18pt;}a,a:hover,a:visited{color:black;text-decoration:none;}table{border-spacing:0}td{font-size:0.85em;border:1px solid black;padding:0.2em;}</style>
+<script type="text/javascript">
+function set_param(name, value) {
+  var elem = document.createElement('input');
+  elem.setAttribute('type', 'hidden');
+  elem.setAttribute('name', name);
+  elem.setAttribute('value', value);
+  var form = document.getElementById('form1');
+  form.appendChild(elem);
+}
+function submit() {
+  document.getElementById('form1').submit();
+}
+</script>
+</head>
+<body>
+'''
+    if 'a' in params.keys() and 'rid' in params.keys():
+      self.server.playlist.lock.acquire()
+      if int(params['rid'][0])==self.server.playlist.request_id:
+        if params['a'][0][0]=='D': self.server.playlist.move_down(int(params['a'][0][1:]))
+        elif params['a'][0][0]=='P': self.server.playlist.inc_repeats(int(params['a'][0][1:]))
+        elif params['a'][0][0]=='M': self.server.playlist.dec_repeats(int(params['a'][0][1:]))
+        elif params['a'][0][0]=='X': self.server.playlist.remove(int(params['a'][0][1:]))
+        elif params['a'][0][0]=='A': self.server.playlist.add(int(params['a'][0][1:]))
       else:
-        self.send_response(200)
-        self.send_header("Content-type", "text/html")
-        self.end_headers()
-        self.wfile.write("<html><head><title>BlinkenBlueHouse Webinterface Login</title></head>")
-        self.wfile.write("<body><form method=\"GET\" action=\"\">")
-        self.wfile.write("<input type=\"password\" name=\"p\">")
-        self.wfile.write("<input type=\"submit\" value=\"Login\">")
-        self.wfile.write("</form></body></html>")
+        output += 'Error in playlist change: playlist was changed by another client.<br>\n'
+      self.server.playlist.lock.release()
+    if 's' in params.keys():
+      if params['s'][0]=='t':
+        output += '<table>\n'
+        for y in range(self.server.playlist.HEIGHT):
+          output += '  <tr>\n'
+          for x in range(self.server.playlist.WIDTH):
+            output += '''    <td><a href="javascript:;" onclick="set_param('s','t');set_param('c','TG%02d');submit();">O</a></td>\n''' % (y*self.server.playlist.WIDTH+x, )
+          output += '  </tr>\n'
+        output += '</table>\n'
+      elif params['s'][0]=='a':
+        self.server.playlist.lock.acquire()
+        self.server.playlist.updateAvailable()
+        output += '<table>\n'
+        rid = self.server.playlist.request_id
+        for i in range(len(self.server.playlist.list)):
+          anim = self.server.playlist.list[i]
+          if anim[0][1] == '': comment = '&nbsp;'
+          else: comment = anim[0][1]
+          output += '  <tr><td>' + anim[0][0] + '</td><td>' + comment + '</td><td>' + str(anim[1]) + '</td>\n'
+          for act in (('D','&darr;'),('P','+'),('M','-'),('X','X')):
+            output += '''    <td><a href="javascript:;" onclick="set_param('s','a');set_param('a','%s%d');set_param('rid','%d');submit();">%s</a></td>\n''' % (act[0],i,rid,act[1])
+          output += '  </tr>\n'
+        output += '</table><p>Available animations:</p><table>\n'
+        for i in range(len(self.server.playlist.available)):
+          anim = self.server.playlist.available[i]
+          if anim[1] == '': comment = '&nbsp;'
+          else: comment = anim[1]
+          output += '  <tr><td>' + anim[0] + '</td><td>' + comment + '''</td><td><a href="javascript:;" onclick="set_param('s','a');set_param('a','A%d');set_param('rid','%d');submit();">add</a></td></tr>\n''' % (i,rid)
+        output += '</table>\n'
+        self.server.playlist.lock.release()
+      output += '<p><a href="javascript:;" onclick="submit();">&lt;- back</a></p>\n'
+    else:
+      for command in [('&Ouml;FF', 'OF'), ('&Ouml;N', 'ON'), ('Animation', 'AN'), ('VU-Meter', 'VU'), ('UV-Meter', 'UV')]:
+        output += '''<a href="javascript:;" onclick="set_param('c','%s');submit();">%s</a><br>\n''' % (command[1], command[0])
+      output += '''<a href="javascript:;" onclick="set_param('s','t');submit();">Toggle</a><br>\n'''
+      output += '''<a href="javascript:;" onclick="set_param('s','a');submit();">Edit Playlist</a><br>\n'''
+    output += \
+'''<form id="form1" action="" method="POST">
+<input type="hidden" name="p" value="%s">
+</form>
+</body></html>''' % config.HTTP_PASSWORD
+    self.wfile.write(output)
 
 class MyHTTPServer(BaseHTTPServer.HTTPServer):
   def __init__(self, port, queue, playlist):
