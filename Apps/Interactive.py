@@ -1,47 +1,67 @@
-import socket, time, threading
+import socket
+import time
+import threading
 from Tkinter import *
 
-CCC_HOST = '10.150.89.194'
-#CCC_HOST = "localhost"
+CCC_HOST = 'localhost'
 CCC_PORT = 5000
 
 net = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 net.connect((CCC_HOST, CCC_PORT))
 
+
+def send(what):
+    try:
+        net.send(what)
+    except socket.error:
+        print 'Socket error'
+
+
 def sendkey(event):
-  try:
-    if event.keysym == "F1": net.send("OF")
-    elif event.keysym == "F2": net.send("ON")
-    elif event.keysym == "F3": net.send("AN")
-    elif event.keysym == "F4": net.send("VU")
-    elif event.keysym == "F5": net.send("INsnake")
-    elif event.keysym == "F6": net.send("INtetris")
-    elif event.keysym == "F7": net.send("INmaze")
-    elif event.keysym == "F8": net.send("INpong")
-    elif event.keysym == "1": net.send("TG00")
-    elif event.keysym == "2": net.send("TG01")
-    elif event.keysym == "3": net.send("TG02")
+    if event.keysym == 'F1':
+        send('OF')
+    elif event.keysym == 'F2':
+        send('ON')
+    elif event.keysym == 'F3':
+        send('AN')
+    elif event.keysym == 'F4':
+        send('VU')
+    elif event.keysym == 'F5':
+        send('INsnake')
+    elif event.keysym == 'F6':
+        send('INtetris')
+    elif event.keysym == 'F7':
+        send('INmaze')
+    elif event.keysym == 'F8':
+        send('INpong')
+    elif event.keysym == '1':
+        send('TG00')
+    elif event.keysym == '2':
+        send('TG01')
+    elif event.keysym == '3':
+        send('TG02')
     else:
-      net.send("ID" + event.keysym)
-    print 'Sent "'+event.keysym+'"'
-  except socket.error: print "Socket error"
+        send('ID' + event.keysym)
+    print 'Sent "%s"' % (event.keysym, )
+
 
 class Heartbeat(threading.Thread):
-  def __init__(self, ccc_socket):
-    threading.Thread.__init__(self)
-    self.setDaemon(True)
-    self.ccc_socket = ccc_socket
-  def run(self):
-    while True:
-      try: self.ccc_socket.send("HB")
-      except socket.error: pass
-      time.sleep(1)
+
+    def __init__(self):
+        threading.Thread.__init__(self)
+        self.setDaemon(True)
+
+    def run(self):
+        while True:
+            send('HB')
+            time.sleep(1)
+
 
 root = Tk()
-root.title("BlinkenBlueHouse-Interactive-Box")
-dingsbums = Label(root,text="whiaschaotsaus?",width=40,height = 10)
+root.title('BlinkenBlueHouse-Interactive-Box')
+dingsbums = Label(root, text='whiaschaotsaus?', width=40, height=10)
 dingsbums.pack()
-root.bind('<Key>',sendkey)
-hb = Heartbeat(net)
+root.bind('<Key>', sendkey)
+hb = Heartbeat()
 hb.start()
 root.mainloop()
