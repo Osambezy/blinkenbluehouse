@@ -150,11 +150,14 @@ class SSCCC:
         elif len(packet) >= 2 and packet[0:2] == 'VU':
             self.switchstatus('vu')
             self.vu_direction = True
+            self.vu_timeout_time = time()
         elif len(packet) >= 2 and packet[0:2] == 'UV':
             self.switchstatus('vu')
             self.vu_direction = False
+            self.vu_timeout_time = time()
         elif len(packet) > 2 and packet[0:2] == 'IN':
             self.switchstatus('interactive', param=packet[2:])
+            self.in_timeout_time = time()
         elif len(packet) >= 3 and packet[0:2] == 'ID':
             if self.status == 'interactive':
                 self.blinker.keypress(packet[2:])

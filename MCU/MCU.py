@@ -260,9 +260,9 @@ class MCU:
         last_received = 0
         self.sender.start()
         while True:
-            if (last_refresh <= time.time() - 10 or
-                    (last_received <= time.time() - 20 and
-                     last_refresh <= time.time() - 1)) and
+            if (last_refresh <= time.time() - 10 or \
+                    (last_received <= time.time() - 20 and \
+                     last_refresh <= time.time() - 1)) and \
                     self.socket_mode == 'client':
                 if FORMAT == 'mcuf':
                     self.socket.send(
