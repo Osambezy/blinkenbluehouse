@@ -2,7 +2,7 @@ byte 0-1:
   ASCII "VU"	VU-Meter
   ASCII "IN"	Interactive mode
   ASCII "OF"	OFF
-  ASCII	"ON"	ON
+  ASCII "ON"	ON
   ASCII "TG"	toggle
 
 byte 3-end:
