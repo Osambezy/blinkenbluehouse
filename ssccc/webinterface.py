@@ -128,7 +128,7 @@ function submit() {
 <input type="hidden" name="p" value="%s">
 </form>
 </body></html>''' % config.HTTP_PASSWORD
-        self.wfile.write(output)
+        self.wfile.write(output.encode("utf-8"))
 
 
 class MyHTTPServer(BaseHTTPServer.HTTPServer):
