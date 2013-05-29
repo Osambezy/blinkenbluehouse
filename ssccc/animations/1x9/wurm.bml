@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="utf-8"?>
+<blm width="1" height="9" bits="1" channels="1">
+ <header>
+  <title>wurm</title>
+  <description>MKH Stustaculum 2013</description>
+  <creator>Johannes</creator>
+ </header>
+
+ <frame duration="100">
+  <row>1</row>
+  <row>0</row>
+  <row>0</row>
+  <row>0</row>
+  <row>0</row>
+  <row>0</row>
+  <row>0</row>
+  <row>0</row>
+  <row>0</row>
+ </frame>
+
+ <frame duration="100">
+  <row>1</row>
+  <row>1</row>
+  <row>0</row>
+  <row>0</row>
+  <row>0</row>
+  <row>0</row>
+  <row>0</row>
+  <row>0</row>
+  <row>0</row>
+ </frame>
+
+ <frame duration="100">
+  <row>1</row>
+  <row>1</row>
+  <row>1</row>
+  <row>0</row>
+  <row>0</row>
+  <row>0</row>
+  <row>0</row>
+  <row>0</row>
+  <row>0</row>
+ </frame>
+
+ <frame duration="100">
+  <row>1</row>
+  <row>1</row>
+  <row>1</row>
+  <row>1</row>
+  <row>0</row>
+  <row>0</row>
+  <row>0</row>
+  <row>0</row>
+  <row>0</row>
+ </frame>
+
+ <frame duration="100">
+  <row>1</row>
+  <row>1</row>
+  <row>1</row>
+  <row>1</row>
+  <row>1</row>
+  <row>0</row>
+  <row>0</row>
+  <row>0</row>
+  <row>0</row>
+ </frame>
+
+<frame duration="100">
+  <row>1</row>
+  <row>1</row>
+  <row>1</row>
+  <row>1</row>
+  <row>1</row>
+  <row>1</row>
+  <row>0</row>
+  <row>0</row>
+  <row>0</row>
+ </frame>
+
+<frame duration="100">
+  <row>1</row>
+  <row>1</row>
+  <row>1</row>
+  <row>1</row>
+  <row>1</row>
+  <row>1</row>
+  <row>1</row>
+  <row>0</row>
+  <row>0</row>
+ </frame>
+
+<frame duration="100">
+  <row>1</row>
+  <row>1</row>
+  <row>1</row>
+  <row>1</row>
+  <row>1</row>
+  <row>1</row>
+  <row>1</row>
+  <row>1</row>
+  <row>0</row>
+ </frame>
+
+<frame duration="500">
+  <row>1</row>
+  <row>1</row>
+  <row>1</row>
+  <row>1</row>
+  <row>1</row>
+  <row>1</row>
+  <row>1</row>
+  <row>1</row>
+  <row>1</row>
+ </frame>
+
+<frame duration="100">
+  <row>0</row>
+  <row>1</row>
+  <row>1</row>
+  <row>1</row>
+  <row>1</row>
+  <row>1</row>
+  <row>1</row>
+  <row>1</row>
+  <row>1</row>
+ </frame>
+
+<frame duration="100">
+  <row>0</row>
+  <row>0</row>
+  <row>1</row>
+  <row>1</row>
+  <row>1</row>
+  <row>1</row>
+  <row>1</row>
+  <row>1</row>
+  <row>1</row>
+ </frame>
+
+<frame duration="100">
+  <row>0</row>
+  <row>0</row>
+  <row>0</row>
+  <row>1</row>
+  <row>1</row>
+  <row>1</row>
+  <row>1</row>
+  <row>1</row>
+  <row>1</row>
+ </frame>
+
+<frame duration="100">
+  <row>0</row>
+  <row>0</row>
+  <row>0</row>
+  <row>0</row>
+  <row>1</row>
+  <row>1</row>
+  <row>1</row>
+  <row>1</row>
+  <row>1</row>
+ </frame>
+
+<frame duration="100">
+  <row>0</row>
+  <row>0</row>
+  <row>0</row>
+  <row>0</row>
+  <row>0</row>
+  <row>1</row>
+  <row>1</row>
+  <row>1</row>
+  <row>1</row>
+ </frame>
+
+<frame duration="100">
+  <row>0</row>
+  <row>0</row>
+  <row>0</row>
+  <row>0</row>
+  <row>0</row>
+  <row>0</row>
+  <row>1</row>
+  <row>1</row>
+  <row>1</row>
+ </frame>
+
+<frame duration="100">
+  <row>0</row>
+  <row>0</row>
+  <row>0</row>
+  <row>0</row>
+  <row>0</row>
+  <row>0</row>
+  <row>0</row>
+  <row>1</row>
+  <row>1</row>
+ </frame>
+
+<frame duration="100">
+  <row>0</row>
+  <row>0</row>
+  <row>0</row>
+  <row>0</row>
+  <row>0</row>
+  <row>0</row>
+  <row>0</row>
+  <row>0</row>
+  <row>1</row>
+ </frame>
+
+<frame duration="300">
+  <row>0</row>
+  <row>0</row>
+  <row>0</row>
+  <row>0</row>
+  <row>0</row>
+  <row>0</row>
+  <row>0</row>
+  <row>0</row>
+  <row>0</row>
+ </frame>
+
+</blm>
