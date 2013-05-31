@@ -7,28 +7,34 @@ class Playlist():
 
     def __init__(self, basepath, WIDTH, HEIGHT):
         self.basepath, self.WIDTH, self.HEIGHT = basepath, WIDTH, HEIGHT
+        self.animpath = self.basepath + '/animations/%dx%d/' % \
+            (self.WIDTH, self.HEIGHT)
         self.request_id = 0
         self.pos_id = 0
         self.pos_repeat = 0
         self.pos_frame = -1
         self.lock = Lock()
         self.updateAvailable()
+        # Put all available animations in list by default.
         self.list = []
-        for i in range(len(self.available)):
-            self.add(i)
+        for anim in self.available:
+            self.list.append([anim, 10])
+        # Then try to load list from file.
+        self.load()
 
     def updateAvailable(self):
         self.request_id += 1
         self.available = []
-        path = self.basepath + '/animations/%dx%d/' % (self.WIDTH, self.HEIGHT)
         try:
-            anims = os.listdir(path)
+            anims = os.listdir(self.animpath)
         except OSError:
             print 'No animations available for %dx%d' % \
                 (self.WIDTH, self.HEIGHT)
             return
         for anim in anims:
-            f = xml.dom.minidom.parse(path + '/' + anim)
+            if not anim.endswith('.bml'):
+                continue
+            f = xml.dom.minidom.parse(self.animpath + '/' + anim)
             try:
                 title = f.getElementsByTagName('header')[0].\
                     getElementsByTagName('title')[0].firstChild.data
@@ -44,8 +50,36 @@ class Playlist():
                     self.HEIGHT != int(root.getAttribute('height')):
                 print "Warning: Animation dimensions don't match matrix size!"\
                       " Using anyway..."
-            self.available.append((title, desc, f))
+            self.available.append((title, desc, f, anim))
         self.available.sort()
+
+    def save(self):
+        with open(self.animpath + 'playlist', 'w') as f:
+            for anim in self.list:
+                f.write('%s\t%d\n' % (anim[0][3], anim[1]))
+
+    def load(self):
+        newlist = []
+        try:
+            with open(self.animpath + 'playlist', 'r') as f:
+                lines = f.readlines()
+        except IOError:
+            return
+        for l in lines:
+            l = l.strip().split('\t')
+            try:
+                filename, repeats = l
+            except ValueError:
+                continue
+            repeats = int(repeats)
+            try:
+                anim = [anim for anim in self.available if anim[3] == \
+                        filename][0]
+            except IndexError:
+                continue
+            newlist.append([anim, repeats])
+        self.list = newlist
+        self.request_id += 1
 
     def animStart(self):
         pass
@@ -98,24 +132,29 @@ class Playlist():
         if n >= 0 and n < len(self.list) - 1:
             self.list[n], self.list[n + 1] = self.list[n + 1], self.list[n]
             self.request_id += 1
+            self.save()
 
     def inc_repeats(self, n):
         if n >= 0 and n < len(self.list):
             self.list[n][1] += 1
             self.request_id += 1
+            self.save()
 
     def dec_repeats(self, n):
         if n >= 0 and n < len(self.list):
             if self.list[n][1] > 1:
                 self.list[n][1] -= 1
                 self.request_id += 1
+                self.save()
 
     def remove(self, n):
         if n >= 0 and n < len(self.list):
             del self.list[n]
             self.request_id += 1
+            self.save()
 
     def add(self, avail_n):
         if avail_n >= 0 and avail_n < len(self.available):
             self.list.append([self.available[avail_n], 10])
             self.request_id += 1
+            self.save()
